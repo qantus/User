@@ -1,0 +1,28 @@
+{% extends request.isAjaxRequest ? 'ajax.twig' : 'user/base.twig' %}
+
+{% block breadcrumbs %}
+    {% set breadcrumbs = [{'name': t('Login', 'user')}] %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="login-form">
+        <h1>{{ t('Login', 'user') }}</h1>
+
+        <form action="" method="post">
+            {{ csrf()|raw }}
+            {{ form.asBlock()|raw }}
+
+            <div class="row submit">
+                <div class="button-holder">
+                    <button type="submit" class="button">{{ t('Login', 'user') }}</button>
+                </div>
+                <div class="links-holder">
+                    <a href="{{ url('user.registration') }}">{{ t('Registration', 'user') }}</a>
+                    <a href="{{ url('user.recoverform') }}">{{ t('Lost password?', 'user') }}</a>
+                </div>
+                <p class="clear"></p>
+            </div>
+        </form>
+    </div>
+{% endblock %}

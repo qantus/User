@@ -2,8 +2,7 @@
 
 namespace Modules\User\Components;
 
-use Mindy\Base\Exception\Exception;
-use Mindy\Base\HttpSession;
+use Mindy\Session\HttpSession;
 use Modules\User\Models\Session;
 
 class UserSession extends HttpSession
@@ -37,8 +36,8 @@ class UserSession extends HttpSession
         $newID = $this->getId();
 
         $session = Session::objects()->filter(['id' => $oldID])->get();
-        if($session !== null) {
-            if($deleteOldSession) {
+        if ($session !== null) {
+            if ($deleteOldSession) {
                 $session->objects()->update(['id' => $newID]);
             } else {
                 $session->id = $newID;

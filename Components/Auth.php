@@ -6,6 +6,7 @@ use Mindy\Base\HttpCookie;
 use Mindy\Base\Mindy;
 use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
+use Mindy\Http\Cookie;
 use Mindy\Orm\Model;
 use Modules\User\Models\User;
 
@@ -169,17 +170,14 @@ class Auth
     protected function restoreFromCookie()
     {
         $app = Mindy::app();
-        $request = $app->getRequest();
-        $cookie = $request->getCookies()->itemAt($this->getStateKeyPrefix());
+        $request = $app->request;
+        $cookie = $request->cookies->get($this->getStateKeyPrefix());
         if ($cookie && !empty($cookie->value) && is_string($cookie->value) && ($data = $app->getSecurityManager()->validateData($cookie->value)) !== false) {
             $data = @unserialize($data);
             if (is_array($data) && isset($data[0], $data[1])) {
                 list($id, $duration) = $data;
-                $model = $this->loadModel($id);
-                if ($model) {
+                if ($model = $this->loadModel($id)) {
                     $this->setModel($model);
-
-                    // $this->changeIdentity($id, $name, $states);
 
                     if ($this->autoRenewCookie) {
                         $this->saveToCookie($model, $duration);
@@ -196,12 +194,10 @@ class Auth
 
     public function login(Model $model, $duration = 0)
     {
-        // $this->changeIdentity($id, $identity->getName(), $states);
-
-        $this->saveToCookie($model, $duration);
-
         $model->last_login = time();
         $model->save(['last_login']);
+
+        $this->saveToCookie($model, $duration);
 
         if ($this->absoluteAuthTimeout) {
             $this->getStorage()->add(self::AUTH_ABSOLUTE_TIMEOUT_VAR, time() + $this->absoluteAuthTimeout);
@@ -219,11 +215,11 @@ class Auth
     /**
      * Creates a cookie to store identity information.
      * @param string $name the cookie name
-     * @return HttpCookie the cookie used to store identity information
+     * @return Cookie the cookie used to store identity information
      */
     protected function createIdentityCookie($name)
     {
-        $cookie = new HttpCookie($name, '');
+        $cookie = new Cookie($name, '');
         if (is_array($this->identityCookie)) {
             foreach ($this->identityCookie as $name => $value) {
                 $cookie->$name = $value;
@@ -257,10 +253,8 @@ class Auth
         $app = Mindy::app();
         $cookie = $this->createIdentityCookie($this->getStateKeyPrefix());
         $cookie->expire = time() + $duration;
-
-        $data = [$model->pk, $duration];
-        $cookie->value = $app->getSecurityManager()->hashData(serialize($data));
-        $app->getRequest()->getCookies()->add($cookie->name, $cookie);
+        $cookie->value = $app->getSecurityManager()->hashData(serialize([$model->pk, $duration]));
+        $app->request->cookies->add($cookie->name, $cookie);
     }
 
     public function setModel(Model $model)

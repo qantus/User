@@ -2,7 +2,8 @@
 
 namespace Modules\User\Commands;
 
-use Mindy\Base\ConsoleCommand;
+use Mindy\Console\ConsoleCommand;
+use Mindy\Helper\Console;
 use Mindy\Helper\Password;
 use Modules\User\Models\User;
 
@@ -16,13 +17,7 @@ class UserCommand extends ConsoleCommand
 
     protected function getPasswordPrompt()
     {
-        echo "Password: ";
-        $password = $this->getStdinLine();
-
-        echo "Confirm password: ";
-        $confirmPassword = $this->getStdinLine();
-
-        return [$password, $confirmPassword];
+        return [Console::prompt("Password:"), Console::prompt("Confirm password:")];
     }
 
     protected function getPassword()
@@ -53,14 +48,12 @@ class UserCommand extends ConsoleCommand
     public function actionCreatesuperuser($username = null, $email = null)
     {
         if ($username === null) {
-            echo "Username: ";
-            $username = $this->getStdinLine();
+            $username = Console::prompt("Username:");
         }
 
         // TODO check correct email
         if ($email === null) {
-            echo "Email: ";
-            $email = $this->getStdinLine();
+            $email = Console::prompt("Email:");
         }
 
         $has = User::objects()->get(['username' => $username, 'email' => $email]);

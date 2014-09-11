@@ -2,9 +2,9 @@
 
 namespace Modules\User\Components;
 
-use Mindy\Base\Filter;
 use Mindy\Base\Mindy;
-use Modules\Core\Controllers\BackendController;
+use Mindy\Controller\Filter;
+use ReflectionClass;
 
 class PermissionControlFilter extends Filter
 {
@@ -17,7 +17,7 @@ class PermissionControlFilter extends Filter
      */
     public function isAllowedAction($action)
     {
-        if($this->_allowedActions === ['*'] || in_array($action, $this->_allowedActions)) {
+        if ($this->_allowedActions === ['*'] || in_array($action, $this->_allowedActions)) {
             return true;
         }
 
@@ -35,11 +35,11 @@ class PermissionControlFilter extends Filter
             return true;
         }
 
-        $reflect = new \ReflectionClass($controller);
+        $reflect = new ReflectionClass($controller);
         $code = strtolower(str_replace('\\', '.', $reflect->getNamespaceName()) . '.' . $reflect->getShortName());
 
         // Проверяем права доступа на все actions контроллера или проверяем имя текущего action
-        if($user->can($code . '.' . $action) || $user->can($code . '.*')) {
+        if ($user->can($code . '.' . $action) || $user->can($code . '.*')) {
             return true;
         }
 
@@ -54,7 +54,7 @@ class PermissionControlFilter extends Filter
      */
     public function setAllowedActions($allowedActions)
     {
-        if(is_array($allowedActions)) {
+        if (is_array($allowedActions)) {
             $this->_allowedActions = $allowedActions;
         }
     }

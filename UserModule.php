@@ -38,6 +38,11 @@ class UserModule extends Module
         return '1.0';
     }
 
+    public function getName()
+    {
+        return self::t('Users');
+    }
+
     public function getMenu()
     {
         return [

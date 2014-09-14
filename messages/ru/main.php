@@ -6,7 +6,7 @@ return array (
   'permission' => '',
   'permissions' => '',
   'user' => '',
-  'Users' => 'Пользователи',
+  'users' => '',
   'group' => '',
   'groups' => '',
   'You can\'t update objects in this category' => '',

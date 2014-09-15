@@ -37,6 +37,6 @@ class FlashSessionStorage implements IFlashStorage
      */
     public function getData()
     {
-        return $_SESSION[self::KEY];
+        return isset($_SESSION[self::KEY]) ? $_SESSION[self::KEY] : $_SESSION[self::KEY] = [];
     }
 }

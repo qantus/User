@@ -20,7 +20,7 @@ abstract class UserBase extends Model
 {
     use PermissionTrait;
 
-    const GUEST_ID = 0;
+    const GUEST_ID = -1;
 
     public static function getFields()
     {

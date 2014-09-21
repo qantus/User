@@ -37,11 +37,8 @@ class UserManager extends Manager
             'activation_key' => $this->generateActivationKey()
         ], $extra));
 
-        if ($model->save()) {
-            return $model;
-        } else {
-            return $model->getErrors();
-        }
+        $model->save();
+        return $model;
     }
 
     public function setPassword($password)

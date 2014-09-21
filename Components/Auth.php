@@ -134,12 +134,12 @@ class Auth
     public function logout($destroySession = true)
     {
         if ($this->allowAutoLogin) {
-            Mindy::app()->getRequest()->getCookies()->remove($this->getStateKeyPrefix());
+            Mindy::app()->request->cookies->remove($this->getStateKeyPrefix());
             if ($this->identityCookie !== null) {
                 $cookie = $this->createIdentityCookie($this->getStateKeyPrefix());
                 $cookie->value = null;
                 $cookie->expire = 0;
-                Mindy::app()->getRequest()->getCookies()->add($cookie->name, $cookie);
+                Mindy::app()->request->cookies->add($cookie->name, $cookie);
             }
         }
         if ($destroySession) {

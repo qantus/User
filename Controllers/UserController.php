@@ -3,23 +3,24 @@
 namespace Modules\User\Controllers;
 
 use Mindy\Base\Mindy;
-use Modules\Core\Controllers\FrontendController;
+use Mindy\Pagination\Pagination;
+use Modules\Core\Controllers\CoreController;
 use Modules\User\Models\User;
 
-class UserController extends FrontendController
+class UserController extends CoreController
 {
     public function allowedActions()
     {
         return ['index', 'view'];
     }
 
-    public function init()
+    public function beforeAction($action)
     {
-        parent::init();
-
-        if (Mindy::app()->auth->isGuest) {
-            $this->redirect(Mindy::app()->getModule('user')->getLoginUrl());
+        if (Mindy::app()->user->isGuest) {
+            $this->r->redirect(Mindy::app()->getModule('user')->getLoginUrl());
         }
+
+        return true;
     }
 
     public function actionView($id)
@@ -34,23 +35,20 @@ class UserController extends FrontendController
         ]);
     }
 
-    /**
-     * Lists all models.
-     */
     public function actionIndex()
     {
-        $models = User::objects()->active()->paginate(isset($_GET['page']) ? $_GET['page'] : 1)->all();
-        echo $this->render('user/list.twig', ['models' => $models]);
+        $qs = User::objects()->active();
+        $pager = new Pagination($qs);
+        echo $this->render('user/list.html', [
+            'pager' => $pager,
+            'models' => $pager->paginate()
+        ]);
     }
 
     public function actionProfile()
     {
-        $id = Mindy::app()->user->pk;
-        $model = User::objects()->filter(['pk' => $id])->get();
-        if ($model === null) {
-            $this->error(404);
-        }
-        echo $this->render('user/profile.twig', [
+        $model = Mindy::app()->user;
+        echo $this->render('user/profile.html', [
             'model' => $model,
             'profile' => $model->profile,
         ]);

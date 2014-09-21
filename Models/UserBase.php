@@ -5,6 +5,7 @@ namespace Modules\User\Models;
 use Mindy\Base\Mindy;
 use Mindy\Helper\Params;
 use Mindy\Orm\Fields\HasManyField;
+use Mindy\Orm\Fields\PasswordField;
 use Modules\User\Components\Permissions\PermissionManager;
 use Modules\User\Components\PermissionTrait;
 use Mindy\Orm\Fields\BooleanField;
@@ -28,13 +29,15 @@ abstract class UserBase extends Model
             "username" => [
                 'class' => CharField::className(),
                 'verboseName' => UserModule::t("Username"),
+                'unique' => true
             ],
             "email" => [
                 'class' => EmailField::className(),
                 'verboseName' => UserModule::t("Email"),
+                'unique' => true
             ],
             "password" => [
-                'class' => CharField::className(),
+                'class' => PasswordField::className(),
                 'null' => true,
                 'verboseName' => UserModule::t("Password"),
             ],
@@ -114,11 +117,19 @@ abstract class UserBase extends Model
     }
 
     /**
+     * @param null $instance
      * @return \Mindy\Orm\Manager|UserManager
      */
     public static function objectsManager($instance = null)
     {
         $className = get_called_class();
         return new UserManager($instance ? $instance : new $className);
+    }
+
+    public function beforeSave($owner, $isNew)
+    {
+        if($isNew) {
+            $owner->activation_key = substr(md5(time() . $owner->username . $owner->pk), 0, 10);
+        }
     }
 }

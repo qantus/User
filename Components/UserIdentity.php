@@ -17,7 +17,7 @@ class UserIdentity extends DeprecatedUserIdentity
     protected $user;
 
     const ERROR_EMAIL_INVALID = 3;
-    const ERROR_NOT_AUTHENTICATED = 3;
+    const ERROR_INACTIVE = 4;
 
     /**
      * Авторизация пользователей.
@@ -26,7 +26,7 @@ class UserIdentity extends DeprecatedUserIdentity
     public function authenticate()
     {
         $model = User::objects()->filter(
-            strpos($this->username, "@") ? ['email' => $this->username] : ['username' => $this->username]
+            [strpos($this->username, "@") ? 'email' : 'username' => $this->username]
         )->get();
 
         if ($model === null) {
@@ -35,6 +35,8 @@ class UserIdentity extends DeprecatedUserIdentity
             } else {
                 $this->errorCode = self::ERROR_USERNAME_INVALID;
             }
+        } else if (!$model->is_active) {
+            $this->errorCode = self::ERROR_INACTIVE;
         } else if (!Password::verifyPassword($this->password, $model->password)) {
             $this->errorCode = self::ERROR_PASSWORD_INVALID;
         } else {

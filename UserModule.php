@@ -28,8 +28,6 @@ class UserModule extends Module
 
     public $loginUrl = 'user.login';
 
-    public $returnUrl = 'user.profile';
-
     // 3600 * 24 * $days
     public $loginDuration = 2592000;
 
@@ -94,11 +92,6 @@ class UserModule extends Module
 
     public function getLoginUrl()
     {
-        return Mindy::app()->urlManager->createUrl($this->loginUrl);
-    }
-
-    public function getReturnUrl()
-    {
-        return Mindy::app()->urlManager->createUrl($this->returnUrl);
+        return Mindy::app()->urlManager->reverse($this->loginUrl);
     }
 }

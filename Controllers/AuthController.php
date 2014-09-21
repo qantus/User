@@ -4,55 +4,32 @@ namespace Modules\User\Controllers;
 
 use Mindy\Base\Mindy;
 use Modules\Core\Controllers\CoreController;
-use Modules\User\Forms\UserLoginForm;
+use Modules\User\Forms\LoginForm;
 use Modules\User\UserModule;
 
 class AuthController extends CoreController
 {
-    public $defaultAction = 'login';
-
-    public $defaultRedirectUrl = '/';
-
     public function allowedActions()
     {
         return ['login', 'logout'];
     }
 
-    public function init()
-    {
-        parent::init();
-
-        if (isset($_GET['redirectUrl'])) {
-            Mindy::app()->auth->setReturnUrl($_GET['redirectUrl']);
-        }
-    }
-
-    public function redirectUser()
-    {
-        $returnUrl = Mindy::app()->getModule('user')->getReturnUrl();
-        parent::redirect($returnUrl ? $returnUrl : $this->defaultRedirectUrl);
-    }
-
     public function actionLogin()
     {
-        if (!Mindy::app()->auth->getIsGuest()) {
-            $this->redirectUser();
+        $app = Mindy::app();
+        if (!$app->user->isGuest) {
+            $this->r->redirect('user.profile');
         }
 
-        $form = new UserLoginForm();
-
-        if (!empty($_POST)) {
-            $form->setAttributes($_POST);
-
-            if ($form->isValid() && $form->login()) {
-                if (Mindy::app()->request->isAjaxRequest) {
-                    $this->json(array(
-                        'status' => 'success',
-                        'title' => UserModule::t('You have successfully logged in to the site')
-                    ));
-                } else {
-                    $this->redirectUser();
-                }
+        $form = new LoginForm();
+        if ($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->login()) {
+            if ($this->r->isAjax) {
+                echo $this->json([
+                    'status' => 'success',
+                    'title' => UserModule::t('You have successfully logged in to the site')
+                ]);
+            } else {
+                $this->r->redirect('user.profile');
             }
         }
 
@@ -60,12 +37,12 @@ class AuthController extends CoreController
             'form' => $form
         ];
 
-        if (Mindy::app()->request->isAjaxRequest) {
-            $this->json([
-                'content' => $this->render('user/_login.twig', $data)
+        if ($this->r->isAjax) {
+            echo $this->json([
+                'content' => $this->render('user/_login.html', $data)
             ]);
         } else {
-            echo $this->render('user/login.twig', $data);
+            echo $this->render('user/login.html', $data);
         }
     }
 
@@ -80,6 +57,6 @@ class AuthController extends CoreController
         }
 
         $auth->logout();
-        $this->redirect(Mindy::app()->getModule('user')->returnUrl);
+        $this->redirect(Mindy::app()->homeUrl);
     }
 }

@@ -1,98 +1,53 @@
 <?php
 
-/**
- * @TODO: copyright
- */
-class RegistrationController extends FrontendController
+namespace Modules\User\Controllers;
+
+use Modules\Core\Controllers\CoreController;
+use Modules\User\Forms\RegistrationForm;
+use Modules\User\Models\User;
+
+class RegistrationController extends CoreController
 {
-    public $defaultAction = 'registration';
-
-    public $model = 'UserRegistration';
-
     public function allowedActions()
     {
-        return array(
-            'registration'
-        );
+        return ['index'];
     }
 
-    /*
-    public function init()
+    public function actionIndex()
     {
-        parent::init();
-        if (!m::param('user.registration'))
-            $this->redirect(Yii::app()->getModule('user')->loginUrl);
-
-        if (Yii::app()->user->id)
-            $this->redirect(Yii::app()->controller->module->profileUrl);
-    }
-    */
-
-    /**
-     * Registration user
-     * @return mixed html render form
-     */
-    public function actionRegistration()
-    {
-        $model = new $this->model();
-        $profile = new UserProfile();
-        $profile->regMode = true;
-
-        // ajax validator
-        $this->ajaxValidation(array($model, $profile), $this->model . '-form');
-
-        if (isset($_POST[$this->model])) {
-
-            $model->attributes = $_POST[$this->model];
-            $profile->attributes = m::request()->getParam('Profile', array());
-
-            if ($model->validate() && $profile->validate()) {
-                $soucePassword = $model->password;
-
-                if ($model->save()) {
-                    $profile->user_id = $model->id;
-                    $profile->save();
-
-                    // Проверяем нужно ли подтверждение пользователя по email и активация его
-                    if (m::param('user.need_activation')) {
-                        $flashMessage = UserModule::t('You have successfully signed up for the site. You an e-mail sent instructions on how to activate your account.');
-
-	                    $this->redirect(array('success'));
-                    } else {
-                        // Автоматически авторизуем пользователя на сайте и отправляем ему письмо об успешной регистрации
-                        $user = Yii::app()->user;
-
-                        if (m::param('user.auto_login')) {
-                            $identity = new UserIdentity($model->email, $soucePassword);
-                            $identity->authenticate();
-
-                            $user->login($identity, UserHelper::getLoginDuration());
-
-                            $user->setFlash('success', UserModule::t("You have successfully signed up for the site."));
-
-	                        $this->redirect(array('success'));
-                        } else {
-                            $user->setFlash('success', 'You have successfully signed up for the site. Please log.');
-
-                            $this->redirect(array('//user/login/login'));
-                        }
-                    }
-                }
-            }
+        $form = new RegistrationForm();
+        if($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->save()) {
+            $this->r->redirect('user.registration_success');
         }
 
-	    $form = $this->getForm($model);
-
-        $this->render('registration', array(
-	        'model' => $model,
-	        'profile' => $profile,
-	        'fields' => $profile->getFields(),
-	        'form' => $form
-        ));
+        echo $this->render('user/registration.html', [
+            'form' => $form
+        ]);
     }
 
-	public function actionSuccess()
-	{
-		$this->render('success');
-	}
+    public function actionSuccess()
+    {
+        echo $this->render('user/registration_success.html');
+    }
+
+    public function actionActivate($key)
+    {
+        $model = User::objects()->filter(['activation_key' => $key])->get();
+        if($model === null) {
+            $this->error(404);
+        }
+
+        if($model->is_active) {
+            $this->r->redirect('user.login');
+        }
+
+        if($model->activation_key === $key) {
+            $model->is_active = true;
+            $model->save(['is_active']);
+
+            echo $this->render('user/registration_activation_success.html');
+        } else {
+            echo $this->render('user/registration_activation_failed.html');
+        }
+    }
 }

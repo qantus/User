@@ -2,46 +2,40 @@
 
 return [
     '/{id:\d+}' => [
-        'name' => 'view',
+        'name'   => 'view',
         'params' => [
             'id' => '(\d+)',
         ],
         'callback' => '\Modules\User\Controllers\UserController:view'
     ],
-
-//    'edit/{:id}' => [
-//        'name' => 'edit',
-//        'callback' => 'UserController:actionUpdate'
-//    ],
-//
-//    'edit' => 'user/user/update',
     '/recover' => [
-        'name' => 'recoverform',
+        'name'     => 'recover',
         'callback' => '\Modules\User\Controllers\RegistrationController:recoverform'
     ],
-//    'recover-{:key}' => 'user/recovery/recovery',
-//    'changepassword/{:id}' => 'user/changepassword/changepassword',
     '/profile' => [
-        'name' => 'profile',
+        'name'     => 'profile',
         'callback' => '\Modules\User\Controllers\UserController:profile',
     ],
-//    'activation/{:key}' => 'user/activation/activation',
-    '/registration' => [
-        'name' => 'registration',
-        'callback' => '\Modules\User\Controllers\RegistrationController:registration'
-    ],
-//    'registration/success' => 'user/registration/success',
 
-//    '' => 'user/user/index',
+    '/registration' => [
+        'name'     => 'registration',
+        'callback' => '\Modules\User\Controllers\RegistrationController:index'
+    ],
+    '/registration/success' => [
+        'name'     => 'registration_success',
+        'callback' => '\Modules\User\Controllers\RegistrationController:success'
+    ],
+    '/registration/activation/{key}' => [
+        'name'     => 'registration_activation',
+        'callback' => '\Modules\User\Controllers\RegistrationController:activate'
+    ],
+
     '/logout' => [
-        'name' => 'logout',
+        'name'     => 'logout',
         'callback' => '\Modules\User\Controllers\AuthController:logout'
     ],
     '/login' => [
-        'name' => 'login',
+        'name'     => 'login',
         'callback' => '\Modules\User\Controllers\AuthController:login'
-    ],
-
-//    'group/change' => 'user/group/change',
-//    'group/select/{:id}' => 'user/group/select',
+    ]
 ];

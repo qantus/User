@@ -53,10 +53,10 @@ class AuthController extends CoreController
     {
         $auth = Mindy::app()->auth;
         if($auth->isGuest) {
-            $this->redirect(Mindy::app()->homeUrl);
+            $this->r->redirect(Mindy::app()->homeUrl);
         }
 
         $auth->logout();
-        $this->redirect(Mindy::app()->homeUrl);
+        $this->r->redirect('user.login');
     }
 }

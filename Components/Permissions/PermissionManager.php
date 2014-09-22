@@ -109,7 +109,6 @@ class PermissionManager
      */
     public function init()
     {
-        parent::init();
         $this->getInitialData();
         $this->getInitialObjectsData();
     }

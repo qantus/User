@@ -23,7 +23,7 @@ class FlashSessionStorage implements IFlashStorage
 
     public function count()
     {
-        return count($_SESSION[self::KEY]);
+        return count(isset($_SESSION[self::KEY]) ? $_SESSION[self::KEY] : $_SESSION[self::KEY] = []);
     }
 
     public function clear()

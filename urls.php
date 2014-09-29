@@ -37,5 +37,5 @@ return [
     '/login' => [
         'name'     => 'login',
         'callback' => '\Modules\User\Controllers\AuthController:login'
-    ]
+    ],
 ];

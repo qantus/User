@@ -2,6 +2,7 @@
 
 namespace Modules\User\Controllers;
 
+use Mindy\Base\Mindy;
 use Modules\Core\Controllers\CoreController;
 use Modules\User\Forms\ChangePasswordForm;
 use Modules\User\Forms\RecoverForm;
@@ -13,13 +14,18 @@ class RecoverController extends CoreController
     public function actionIndex()
     {
         $form = new RecoverForm();
-        if ($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->send()) {
-            echo $this->render('user/recover_form_success.html');
-        } else {
-            echo $this->render('user/recover_form.html', [
-                'form' => $form
-            ]);
+        if ($this->r->isPost) {
+            if ($form->setAttributes($_POST)->isValid() && $form->send()) {
+                $this->r->flash->succes(UserModule::t("Message was sended to your email"));
+                echo $this->render('user/recover_form_success.html');
+                Mindy::app()->end();
+            } else {
+                $this->r->flash->error(UserModule::t("An error has occurred. Please try again later."));
+            }
         }
+        echo $this->render('user/recover_form.html', [
+            'form' => $form
+        ]);
     }
 
     public function actionActivate($key)

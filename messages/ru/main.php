@@ -84,5 +84,6 @@ return array (
   'Change password' => 'Изменить пароль',
   'Password changed' => 'Пароль изменен',
   'Profile' => 'Профиль',
-  'Logout' => 'Выйти'
+  'Logout' => 'Выйти',
+  'An error has occurred. Please try again later.' => 'Произошла ошибка. Пожалуйста попробуйте позже.'
 );

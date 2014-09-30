@@ -3,10 +3,10 @@
 namespace Modules\User\Forms;
 
 use Mindy\Base\Mindy;
-use Mindy\Form\Fields\PasswordField;
-use Mindy\Form\ModelForm;
 use Mindy\Form\Fields\CharField;
 use Mindy\Form\Fields\EmailField;
+use Mindy\Form\Fields\PasswordField;
+use Mindy\Form\ModelForm;
 use Mindy\Form\Validator\MinLengthValidator;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
@@ -52,7 +52,7 @@ class RegistrationForm extends ModelForm
 
     public function cleanPassword_repeat($value)
     {
-        if($this->password === $value) {
+        if ($this->password === $value) {
             return $value;
         } else {
             $this->addError('password_repeat', 'Incorrect password repeat');
@@ -68,9 +68,14 @@ class RegistrationForm extends ModelForm
     public function save()
     {
         $model = User::objects()->createUser($this->username, $this->password, $this->email);
-        if($model->hasErrors() === false) {
-            Mindy::app()->mail->fromCode('user.registration', $this->email, [
-                'data' => $this->cleanedData
+        if ($model->hasErrors() === false) {
+            $app = Mindy::app();
+            $app->mail->fromCode('user.registration', $this->email, [
+                'data' => $this->cleanedData,
+                'site' => $app->getModule('Sites')->getSite(),
+                'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user.registration_activation', [
+                        'key' => $model->activation_key
+                    ]))
             ]);
             return $model;
         }

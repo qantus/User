@@ -31,6 +31,7 @@ class RecoverForm extends Form
             $app = Mindy::app();
             $recoverUrl = $app->urlManager->reverse('user.recover', ['key' => $model->activation_key]);
             return $app->mail->fromCode('user.recover', $model->email, [
+                'data' => $model,
                 'username' => $model->username,
                 'site' => $app->getModule('Sites')->getSite(),
                 'activation_url' => $app->request->http->absoluteUrl($recoverUrl),

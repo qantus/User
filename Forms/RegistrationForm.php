@@ -71,7 +71,7 @@ class RegistrationForm extends ModelForm
         if ($model->hasErrors() === false) {
             $app = Mindy::app();
             $app->mail->fromCode('user.registration', $this->email, [
-                'data' => $this->cleanedData,
+                'data' => $model,
                 'site' => $app->getModule('Sites')->getSite(),
                 'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user.registration_activation', [
                         'key' => $model->activation_key

@@ -83,6 +83,6 @@ return array (
   'Link to recovery password successfully sent to your email address' => 'Ссылка для восстановления пароля успешно отправлена на вашу электронную почту',
   'Change password' => 'Изменить пароль',
   'Password changed' => 'Пароль изменен',
-  'Profile' => 'Профиль пользователя',
+  'Profile' => 'Профиль',
   'Logout' => 'Выйти'
 );

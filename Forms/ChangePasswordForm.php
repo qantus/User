@@ -12,17 +12,18 @@ class ChangePasswordForm extends ModelForm
 {
     public $exclude = [
         'username', 'email', 'is_staff', 'is_superuser', 'is_active', 'activation_key',
-        'profile', 'last_login', 'groups', 'permissions', 'users_set'
+        'profile', 'last_login', 'groups', 'permissions', 'users_set', 'password'
     ];
 
     public function getFields()
     {
         return [
-            'password' => [
+            'password_create' => [
                 'class' => PasswordField::className(),
                 'validators' => [
                     new MinLengthValidator(6)
                 ],
+                'label' => UserModule::t('Password')
             ],
             'password_repeat' => [
                 'class' => PasswordField::className(),
@@ -36,7 +37,7 @@ class ChangePasswordForm extends ModelForm
 
     public function cleanPassword_repeat($value)
     {
-        if ($this->password === $value) {
+        if ($this->password_create === $value) {
             return $value;
         } else {
             $this->addError('password_repeat', 'Incorrect password repeat');
@@ -51,6 +52,6 @@ class ChangePasswordForm extends ModelForm
 
     public function save()
     {
-        return $this->getInstance()->objects()->setPassword($this->password);
+        return $this->getInstance()->objects()->setPassword($this->password_create);
     }
 }

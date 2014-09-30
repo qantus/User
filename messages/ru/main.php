@@ -82,4 +82,5 @@ return array (
   'Username or email' => 'Имя пользователя или электронная почта',
   'Link to recovery password sucessfully sended to your email address' => 'Ссылка для восстановления пароля успешно отправлена на вашу электронную почту',
   'Change password' => 'Изменить пароль',
+  'Password changed' => 'Пароль изменен',
 );

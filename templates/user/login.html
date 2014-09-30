@@ -7,17 +7,12 @@
         <form action="" method="post">
             {% csrf_token %}
             {{ form|safe }}
-
-            <div class="row submit">
-                <div class="button-holder">
-                    <button type="submit" class="button">{{ t('Login', 'user') }}</button>
-                </div>
-                <div class="links-holder">
-                    <a href="{% url 'user.registration' %}">{{ t('Registration', 'user') }}</a>
-                    <a href="{% url 'user.recover' %}">{{ t('Lost password?', 'user') }}</a>
-                </div>
-                <p class="clear"></p>
-            </div>
+            <p class="right">
+                <a class="link" href="{% url 'user.registration' %}">{{ t('Registration', 'user') }}</a>
+                <a class="link" href="{% url 'user.recover' %}">{{ t('Lost password?', 'user') }}</a>
+            </p>
+            <br/>
+            <input type="submit" class="link-button" value="{{ t('Login', 'user') }}"/>
         </form>
     </div>
 {% endblock %}

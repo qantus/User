@@ -35,7 +35,6 @@ return array (
   'Retype Password' => 'Повтор пароля',
   'Main information' => '',
   'Extra information' => '',
-  'Username or email' => '',
   'Email is incorrect.' => '',
   'Username is incorrect.' => '',
   'Password is incorrect.' => '',
@@ -77,4 +76,10 @@ return array (
   'Url with activation key' => '',
   'Url with link to recover password' => '',
   'Url with link to change password' => '',
+  'Remember me' => 'Запомнить меня',
+  'Password repeat' => 'Повтор пароля',
+  'Recover password' => 'Восстановить пароль',
+  'Username or email' => 'Имя пользователя или электронная почта',
+  'Link to recovery password sucessfully sended to your email address' => 'Ссылка для восстановления пароля успешно отправлена на вашу электронную почту',
+  'Change password' => 'Изменить пароль',
 );

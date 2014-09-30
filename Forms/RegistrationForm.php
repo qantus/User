@@ -9,6 +9,7 @@ use Mindy\Form\Fields\CharField;
 use Mindy\Form\Fields\EmailField;
 use Mindy\Form\Validator\MinLengthValidator;
 use Modules\User\Models\User;
+use Modules\User\UserModule;
 
 class RegistrationForm extends ModelForm
 {
@@ -28,7 +29,7 @@ class RegistrationForm extends ModelForm
     {
         return [
             'username' => [
-                'class' => CharField::className()
+                'class' => CharField::className(),
             ],
             'email' => [
                 'class' => EmailField::className(),
@@ -44,6 +45,7 @@ class RegistrationForm extends ModelForm
                 'validators' => [
                     new MinLengthValidator(6)
                 ],
+                'label' => UserModule::t('Password repeat')
             ]
         ];
     }

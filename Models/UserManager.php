@@ -69,6 +69,13 @@ class UserManager extends Manager
         return substr(md5(Password::generateSalt()), 0, 10);
     }
 
+    public function changeActivationKey()
+    {
+        return $this->getModel()->setAttributes([
+            'activation_key' => $this->generateActivationKey()
+        ])->save(['activation_key']);
+    }
+
     public function active()
     {
         return $this->filter(['is_active' => true]);

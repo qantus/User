@@ -17,6 +17,11 @@ use Mindy\Orm\Fields\ManyToManyField;
 use Mindy\Orm\Model;
 use Modules\User\UserModule;
 
+/**
+ * Class UserBase
+ * @package Modules\User
+ * @method static \Modules\User\Models\UserManager objects($instance = null)
+ */
 abstract class UserBase extends Model
 {
     use PermissionTrait;
@@ -104,11 +109,11 @@ abstract class UserBase extends Model
 
     public function notifyRegistration()
     {
-        Mindy::app()->mail->send('user.registration', $this->email, array(
+        return Mindy::app()->mail->send('user.registration', $this->email, [
             'username' => $this->username,
             'sitename' => Params::get('core.sitename'),
-            'activation_url' => Mindy::app()->createAbsoluteUrl('//user/activation/activation', array('key' => $this->activation_key)),
-        ));
+            'activation_url' => Mindy::app()->urlManager->reverse('user.registration_activation', ['key' => $this->activation_key]),
+        ]);
     }
 
     public function getPermissionList()

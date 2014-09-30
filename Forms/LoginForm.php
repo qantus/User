@@ -19,17 +19,22 @@ class LoginForm extends Form
         return [
             'username' => [
                 'class' => TextField::className(),
+                'label' => UserModule::t('Username'),
                 'html' => [
-                    'placeholder' => UserModule::t('Username or email')
+                    'placeholder' => UserModule::t('Username')
                 ],
             ],
             'password' => [
                 'class' => PasswordField::className(),
+                'label' => UserModule::t('Password'),
                 'html' => [
                     'placeholder' => UserModule::t('Password')
                 ]
             ],
-            'rememberMe' => CheckboxField::className()
+            'rememberMe' => [
+                'class' => CheckboxField::className(),
+                'label' => UserModule::t('Remember me')
+            ]
         ];
     }
 

@@ -84,6 +84,7 @@ return array (
   'Retype Password' => 'Повтор пароля',
   'Recover password' => 'Восстановить пароль',
   'Link to recovery password successfully sent to your email address' => 'Ссылка для восстановления пароля успешно отправлена на вашу электронную почту',
-  'Profile' => 'Профиль пользователя',
+  'Profile' => 'Профиль',
   'Logout' => 'Выйти',
+  'An error has occurred. Please try again later.' => 'Произошла ошибка. Пожалуйста попробуйте позже.'
 );

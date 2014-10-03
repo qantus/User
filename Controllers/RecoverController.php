@@ -16,7 +16,7 @@ class RecoverController extends CoreController
         $form = new RecoverForm();
         if ($this->r->isPost) {
             if ($form->setAttributes($_POST)->isValid() && $form->send()) {
-                $this->r->flash->succes(UserModule::t("Message was sended to your email"));
+                $this->r->flash->success(UserModule::t("Message was sended to your email"));
                 echo $this->render('user/recover_form_success.html');
                 Mindy::app()->end();
             } else {

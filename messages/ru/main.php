@@ -86,5 +86,6 @@ return array (
   'Link to recovery password successfully sent to your email address' => 'Ссылка для восстановления пароля успешно отправлена на вашу электронную почту',
   'Profile' => 'Профиль',
   'Logout' => 'Выйти',
-  'An error has occurred. Please try again later.' => 'Произошла ошибка. Пожалуйста попробуйте позже.'
+  'An error has occurred. Please try again later.' => 'Произошла ошибка. Пожалуйста попробуйте позже.',
+  'User [[{url}|{name}]] logged in' => 'Пользователь [[{url}|{name}]] вошел в систему'
 );

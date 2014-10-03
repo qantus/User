@@ -22,6 +22,9 @@ trait UserActionsTrait
     public function recordAction($message)
     {
         if(YII_TEST === false) {
+            if (method_exists($this, 'getModuleName')) {
+                return UserLog::log($message, $this->getModuleName());
+            };
             return UserLog::log($message);
         }
     }

@@ -4,8 +4,6 @@ return array (
   'You have successfully logged in to the site' => 'Вы успешно вошли на сайт',
   'Change password' => 'Изменить пароль',
   'Password changed' => 'Пароль изменен',
-<<<<<<< HEAD
-  'Guest' => 'Гость',
   'Developers' => '',
   'Games' => '',
   'Genres' => '',
@@ -13,8 +11,6 @@ return array (
   'Publishers' => '',
   'Video' => '',
   'Screenshots' => '',
-=======
->>>>>>> 76177aa9dca64a2817a70ca3edf25aa883c63586
   'permission' => 'правило доступа',
   'permissions' => 'права доступа',
   'user' => 'пользователь',

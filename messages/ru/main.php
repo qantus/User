@@ -97,4 +97,9 @@ return array (
   'Profile' => 'Профиль',
   'Logout' => 'Выйти',
   'User [[{url}|{name}]] logged in' => 'Пользователь [[{url}|{name}]] вошел в систему',
+  'You have successfully registered on the site' => 'Вы успешно зарегистрировались на сайте',
+  'Registration complete' => 'Регистрация завершена',
+  'You have successfully registered on the site. On your mail sent a letter with further instructions.' => 'Вы успешно зарегистрировались на сайте. На вашу почту выслано письмо с дальнейшими инструкциями.',
+  'This email address is already in use on the site' => 'Данный электронный адрес уже используется на сайте',
+  'This username is already in use on the site' => 'Данное имя пользователя уже используется на сайте'
 );

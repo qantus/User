@@ -37,7 +37,7 @@ class RecoverController extends CoreController
 
         if ($model->activation_key === $key) {
             $form = new ChangePasswordForm([
-                'instance' => $model
+                'model' => $model
             ]);
             if ($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->save()) {
                 $this->r->flash->success(UserModule::t('Password changed'));

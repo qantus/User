@@ -3,17 +3,24 @@
 namespace Modules\User\Forms;
 
 use Mindy\Form\Fields\PasswordField;
-use Mindy\Form\ModelForm;
+use Mindy\Form\Form;
 use Mindy\Form\Validator\MinLengthValidator;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
-class ChangePasswordForm extends ModelForm
+class ChangePasswordForm extends Form
 {
-    public $exclude = [
-        'username', 'email', 'is_staff', 'is_superuser', 'is_active', 'activation_key',
-        'profile', 'last_login', 'groups', 'permissions', 'users_set', 'password'
-    ];
+    private $_model;
+
+    public function setModel(User $model)
+    {
+        $this->_model = $model;
+    }
+
+    public function getModel()
+    {
+        return $this->_model;
+    }
 
     public function getFields()
     {
@@ -45,13 +52,8 @@ class ChangePasswordForm extends ModelForm
         return null;
     }
 
-    public function getModel()
-    {
-        return new User;
-    }
-
     public function save()
     {
-        return $this->getInstance()->objects()->setPassword($this->password_create);
+        return $this->getModel()->objects()->setPassword($this->password_create);
     }
 }

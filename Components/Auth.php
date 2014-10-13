@@ -64,7 +64,7 @@ class Auth
             $this->renewCookie();
         }
 
-        if($this->getIsGuest()) {
+        if ($this->getIsGuest()) {
             $guest = new User();
             $guest->setAttributes([
                 'id' => -1,
@@ -192,15 +192,19 @@ class Auth
         return Mindy::app()->session;
     }
 
-    public function login(Model $model, $duration = 0)
+    public function login(Model $model, $duration = null)
     {
         $model->last_login = time();
         $model->save(['last_login']);
 
+        if ($duration === null) {
+            $duration = Mindy::app()->getModule('User')->loginDuration;
+        }
         $this->saveToCookie($model, $duration);
 
         if ($this->absoluteAuthTimeout) {
             $this->getStorage()->add(self::AUTH_ABSOLUTE_TIMEOUT_VAR, time() + $this->absoluteAuthTimeout);
+            d($this->getStorage()->get(self::AUTH_ABSOLUTE_TIMEOUT_VAR));
         }
 
         $this->setModel($model);

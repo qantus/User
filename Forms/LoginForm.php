@@ -33,7 +33,8 @@ class LoginForm extends Form
             ],
             'rememberMe' => [
                 'class' => CheckboxField::className(),
-                'label' => UserModule::t('Remember me')
+                'label' => UserModule::t('Remember me'),
+                'value' => true
             ]
         ];
     }
@@ -75,7 +76,6 @@ class LoginForm extends Form
 
     public function login()
     {
-        $loginDuration = $this->rememberMe ? Mindy::app()->getModule('user')->loginDuration : 3600 * 24 * 1;
-        return Mindy::app()->auth->login($this->_identity->getModel(), $loginDuration);
+        return Mindy::app()->auth->login($this->_identity->getModel(), $this->rememberMe ? null : 3600);
     }
 }

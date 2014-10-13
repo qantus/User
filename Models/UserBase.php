@@ -85,6 +85,12 @@ abstract class UserBase extends Model
                 'through' => UserPermission::className(),
                 'verboseName' => UserModule::t("Permissions"),
             ],
+            'key' => [
+                'class' => ForeignField::className(),
+                'modelClass' => Key::className(),
+                'null' => true,
+                'verboseName' => UserModule::t("User profile"),
+            ],
         ];
     }
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * 
+ *
  *
  * All rights reserved.
- * 
+ *
  * @author Falaleev Maxim
  * @email max@studio107.ru
  * @version 1.0
@@ -14,18 +14,14 @@
 
 namespace Modules\User\Components;
 
-
 use Modules\Core\Components\UserLog;
 
 trait UserActionsTrait
 {
-    public function recordAction($message)
+    public static function recordAction($message, $moduleName)
     {
-        if(YII_TEST === false) {
-            if (method_exists($this, 'getModuleName')) {
-                return UserLog::log($message, $this->getModuleName());
-            };
-            return UserLog::log($message);
+        if (YII_TEST === false) {
+            return UserLog::log($message, $moduleName);
         }
     }
 }

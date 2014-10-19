@@ -9,10 +9,11 @@ use Mindy\Helper\Traits\Configurator;
 use Mindy\Http\Cookie;
 use Mindy\Orm\Model;
 use Modules\User\Models\User;
+use Modules\User\UserModule;
 
 class Auth
 {
-    use Accessors, Configurator;
+    use Accessors, Configurator, UserActionsTrait;
 
     const AUTH_TIMEOUT_VAR = '__timeout';
     const AUTH_ABSOLUTE_TIMEOUT_VAR = '__absolute_timeout';
@@ -208,6 +209,12 @@ class Auth
         }
 
         $this->setModel($model);
+
+        $this->recordAction(UserModule::t('User [[{url}|{name}]] logged in', [
+            '{url}' => $model->getAbsoluteUrl(),
+            '{name}' => (string) $model
+        ]), $model->getModuleName());
+
         return !$this->getIsGuest();
     }
 

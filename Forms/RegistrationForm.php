@@ -6,39 +6,30 @@ use Mindy\Base\Mindy;
 use Mindy\Form\Fields\CharField;
 use Mindy\Form\Fields\EmailField;
 use Mindy\Form\Fields\PasswordField;
-use Mindy\Form\ModelForm;
+use Mindy\Form\Form;
 use Mindy\Form\Validator\MinLengthValidator;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
-class RegistrationForm extends ModelForm
+class RegistrationForm extends Form
 {
-    public $exclude = [
-        'users_set',
-        'permissions',
-        'groups',
-        'last_login',
-        'is_active',
-        'is_staff',
-        'is_superuser',
-        'profile',
-        'activation_key'
-    ];
-
     public function getFields()
     {
         return [
             'username' => [
                 'class' => CharField::className(),
+                'label' => UserModule::t('Username')
             ],
             'email' => [
                 'class' => EmailField::className(),
+                'label' => UserModule::t('Email')
             ],
             'password' => [
                 'class' => PasswordField::className(),
                 'validators' => [
                     new MinLengthValidator(6)
                 ],
+                'label' => UserModule::t('Password')
             ],
             'password_repeat' => [
                 'class' => PasswordField::className(),
@@ -58,6 +49,22 @@ class RegistrationForm extends ModelForm
             $this->addError('password_repeat', 'Incorrect password repeat');
         }
         return null;
+    }
+
+    public function cleanEmail($value)
+    {
+        if (User::objects()->filter(['email' => $value])->count() > 0) {
+            $this->addError('email', UserModule::t('This email address is already in use on the site'));
+        }
+        return $value;
+    }
+
+    public function cleanUsername($value)
+    {
+        if (User::objects()->filter(['username' => $value])->count() > 0) {
+            $this->addError('username', UserModule::t('This username is already in use on the site'));
+        }
+        return $value;
     }
 
     public function getModel()

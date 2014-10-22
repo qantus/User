@@ -16,7 +16,7 @@ class RecoverController extends CoreController
         $form = new RecoverForm();
         if ($this->r->isPost) {
             if ($form->setAttributes($_POST)->isValid() && $form->send()) {
-                $this->r->flash->succes(UserModule::t("Message was sended to your email"));
+                $this->r->flash->success(UserModule::t("Message was sended to your email"));
                 echo $this->render('user/recover_form_success.html');
                 Mindy::app()->end();
             } else {
@@ -37,7 +37,7 @@ class RecoverController extends CoreController
 
         if ($model->activation_key === $key) {
             $form = new ChangePasswordForm([
-                'instance' => $model
+                'model' => $model
             ]);
             if ($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->save()) {
                 $this->r->flash->success(UserModule::t('Password changed'));

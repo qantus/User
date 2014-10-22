@@ -9,10 +9,11 @@ use Mindy\Helper\Traits\Configurator;
 use Mindy\Http\Cookie;
 use Mindy\Orm\Model;
 use Modules\User\Models\User;
+use Modules\User\UserModule;
 
 class Auth
 {
-    use Accessors, Configurator;
+    use Accessors, Configurator, UserActionsTrait;
 
     const AUTH_TIMEOUT_VAR = '__timeout';
     const AUTH_ABSOLUTE_TIMEOUT_VAR = '__absolute_timeout';
@@ -64,7 +65,7 @@ class Auth
             $this->renewCookie();
         }
 
-        if($this->getIsGuest()) {
+        if ($this->getIsGuest()) {
             $guest = new User();
             $guest->setAttributes([
                 'id' => -1,
@@ -192,18 +193,28 @@ class Auth
         return Mindy::app()->session;
     }
 
-    public function login(Model $model, $duration = 0)
+    public function login(Model $model, $duration = null)
     {
         $model->last_login = time();
         $model->save(['last_login']);
 
+        if ($duration === null) {
+            $duration = Mindy::app()->getModule('User')->loginDuration;
+        }
         $this->saveToCookie($model, $duration);
 
         if ($this->absoluteAuthTimeout) {
             $this->getStorage()->add(self::AUTH_ABSOLUTE_TIMEOUT_VAR, time() + $this->absoluteAuthTimeout);
+            d($this->getStorage()->get(self::AUTH_ABSOLUTE_TIMEOUT_VAR));
         }
 
         $this->setModel($model);
+
+        $this->recordAction(UserModule::t('User [[{url}|{name}]] logged in', [
+            '{url}' => $model->getAbsoluteUrl(),
+            '{name}' => (string) $model
+        ]), $model->getModuleName());
+
         return !$this->getIsGuest();
     }
 

@@ -2,13 +2,24 @@
 
 namespace Modules\User\Components;
 
-use Mindy\Base\UserIdentity as DeprecatedUserIdentity;
 use Mindy\Helper\Password;
 use Mindy\Orm\Model;
 use Modules\User\Models\User;
 
-class UserIdentity extends DeprecatedUserIdentity
+class UserIdentity extends BaseUserIdentity
 {
+    /**
+     * @var string username
+     */
+    public $username;
+    /**
+     * @var string password
+     */
+    public $password;
+
+    /**
+     * @var \Modules\User\Models\User
+     */
     private $_model;
 
     /**
@@ -20,8 +31,21 @@ class UserIdentity extends DeprecatedUserIdentity
     const ERROR_INACTIVE = 4;
 
     /**
-     * Авторизация пользователей.
-     * @return boolean если пользователь успешно авторизовался
+     * Constructor.
+     * @param string $username username
+     * @param string $password password
+     */
+    public function __construct($username, $password)
+    {
+        $this->username = $username;
+        $this->password = $password;
+    }
+
+    /**
+     * Authenticates a user based on {@link username} and {@link password}.
+     * Derived classes should override this method, or an exception will be thrown.
+     * This method is required by {@link IUserIdentity}.
+     * @return boolean whether authentication succeeds.
      */
     public function authenticate()
     {

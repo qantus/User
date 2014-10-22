@@ -4,7 +4,6 @@ return array (
   'You have successfully logged in to the site' => 'Вы успешно вошли на сайт',
   'Change password' => 'Изменить пароль',
   'Password changed' => 'Пароль изменен',
-  'Guest' => 'Гость',
   'permission' => 'правило доступа',
   'permissions' => 'права доступа',
   'user' => 'пользователь',
@@ -17,6 +16,8 @@ return array (
   'Permissions' => 'Права доступа',
   'New password is saved.' => 'Новый пароль сохранен.',
   'No group' => 'Нет группы',
+  'Message was sended to your email' => 'Сообщение было высылать на адрес вашей электронной почты',
+  'An error has occurred. Please try again later.' => 'Произошла ошибка. Пожалуйста попробуйте позже.',
   'Password' => 'Пароль',
   'Password repeat' => 'Повтор пароля',
   'Username' => 'Имя пользователя',
@@ -65,6 +66,7 @@ return array (
   'Url with activation key' => 'Ссылка с кодом активации',
   'Url with link to recover password' => 'Ссылка для восстановления пароля',
   'Url with link to change password' => 'Ссылка для смены пароля',
+  'Guest' => 'Гость',
   'You account is already activated' => 'Ваш аккаунт уже активирован',
   'User activation' => 'Активация аккаунта',
   'You account is activated and now waiting to moderate.' => 'Ваш аккаунт активирован и ожидает модерации',
@@ -86,6 +88,5 @@ return array (
   'Link to recovery password successfully sent to your email address' => 'Ссылка для восстановления пароля успешно отправлена на вашу электронную почту',
   'Profile' => 'Профиль',
   'Logout' => 'Выйти',
-  'An error has occurred. Please try again later.' => 'Произошла ошибка. Пожалуйста попробуйте позже.',
-  'User [[{url}|{name}]] logged in' => 'Пользователь [[{url}|{name}]] вошел в систему'
+  'User [[{url}|{name}]] logged in' => 'Пользователь [[{url}|{name}]] вошел в систему',
 );

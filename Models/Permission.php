@@ -2,6 +2,7 @@
 
 namespace Modules\User\Models;
 
+use Mindy\Base\Mindy;
 use Mindy\Orm\Fields\BooleanField;
 use Mindy\Orm\Fields\CharField;
 use Mindy\Orm\Fields\IntField;
@@ -76,5 +77,13 @@ class Permission extends Model
             self::TYPE_USER => UserModule::t('User'),
             self::TYPE_GROUP => UserModule::t('Group'),
         ];
+    }
+
+    /**
+     * @return \Modules\User\Components\Permissions
+     */
+    protected function getPermissions()
+    {
+        return Mindy::app()->getComponent('permissions');
     }
 }

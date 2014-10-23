@@ -43,6 +43,7 @@ class Group extends Model
             'permissions' => [
                 'class' => ManyToManyField::className(),
                 'modelClass' => Permission::className(),
+                'through' => GroupPermission::className(),
                 'verboseName' => UserModule::t("Permissions"),
             ],
             'users' => [

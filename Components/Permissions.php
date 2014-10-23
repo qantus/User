@@ -744,4 +744,11 @@ class Permissions
             return $userCan;
         }
     }
+
+    public function delete($code)
+    {
+        if (isset($this->_permissions[$code])) {
+            unset($this->_permissions[$code]);
+        }
+    }
 }

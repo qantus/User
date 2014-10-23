@@ -38,9 +38,4 @@ class GroupPermission extends Model
             ]
         ];
     }
-
-    public static function tableName()
-    {
-        return "{{user_group_permission}}";
-    }
 }

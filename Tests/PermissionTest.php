@@ -40,8 +40,6 @@ class PermissionTest extends UserBaseTest
         ]);
         $this->assertTrue($perm->save());
 
-        $this->p->fetchData();
-
         $this->assertTrue($this->p->canBizRule('test', ['foo' => 'bar']));
         $this->assertFalse($this->p->canBizRule('test', ['foo' => 'default']));
     }
@@ -61,8 +59,6 @@ class PermissionTest extends UserBaseTest
         ]);
         $this->assertEquals(1, $user->permissions->count());
 
-        $this->p->fetchData();
-
         $this->assertTrue($user->can('test', [], false));
         $this->assertFalse($user->can('test_something', [], false));
     }
@@ -79,8 +75,6 @@ class PermissionTest extends UserBaseTest
 
         $user = User::objects()->createUser('foo', 'bar', 'admin@admin.com');
         $this->assertEquals(1, $user->permissions->count());
-
-        $this->p->fetchData();
 
         $this->assertTrue($user->can('test', [], false));
         $this->assertFalse($user->can('test_something', [], false));
@@ -99,8 +93,6 @@ class PermissionTest extends UserBaseTest
 
         $user = User::objects()->createUser('foo', 'bar', 'admin@admin.com');
         $this->assertEquals(1, $user->permissions->count());
-
-        $this->p->fetchData();
 
         $this->assertTrue($this->app->permissions->canBizRule('test', ['foo' => 'bar']));
         $this->assertFalse($this->app->permissions->canBizRule('test', ['foo' => 'default']));
@@ -122,8 +114,6 @@ class PermissionTest extends UserBaseTest
 
         $user = User::objects()->createUser('foo', 'bar', 'admin@admin.com');
         $this->assertEquals(1, $user->permissions->count());
-
-        $this->p->fetchData();
 
         $this->assertTrue($this->app->permissions->canBizRule('test', ['foo' => 'bar']));
         $this->assertFalse($this->app->permissions->canBizRule('test', ['foo' => 'default']));

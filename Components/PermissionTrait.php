@@ -41,17 +41,16 @@ trait PermissionTrait
     {
         $app = Mindy::app();
 
-        $user = $app->user;
         $cache = $app->cache;
 
         /**
          * Пользователю суперадминистратор все разрешено по умолчанию
          */
-        if ($user->is_superuser) {
+        if ($this->is_superuser) {
             return true;
         }
 
-        $cacheId = (is_array($operation) ? implode('|', $operation) : $operation) . $user->pk . '_' . count($params);
+        $cacheId = (is_array($operation) ? implode('|', $operation) : $operation) . $this->pk . '_' . count($params);
 
         /**
          * Проверяем данную операцию для пользователя в кеше
@@ -80,15 +79,14 @@ trait PermissionTrait
     {
         $app = Mindy::app();
 
-        $user = $app->user;
         $cache = $app->cache;
 
         // Пользователю суперадминистратор все разрешено по умолчанию
-        if ($user->is_superuser) {
+        if ($this->is_superuser) {
             return true;
         }
 
-        $cacheId = (is_array($operation) ? implode('|', $operation) : $operation) . $modelId . $user->pk . '_' . count($params);
+        $cacheId = (is_array($operation) ? implode('|', $operation) : $operation) . $modelId . $this->pk . '_' . count($params);
 
         /**
          * Проверяем данную операцию для пользователя в кеше

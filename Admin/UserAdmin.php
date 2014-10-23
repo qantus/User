@@ -6,7 +6,6 @@ use Mindy\Orm\Model;
 use Modules\Admin\Components\ModelAdmin;
 use Modules\User\Forms\UserForm;
 use Modules\User\Models\User;
-use Modules\User\UserModule;
 
 class UserAdmin extends ModelAdmin
 {

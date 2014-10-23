@@ -26,15 +26,5 @@ class PermissionAdmin extends ModelAdmin
     {
         return new Permission;
     }
-
-    public function getVerboseName()
-    {
-        return UserModule::t('permission');
-    }
-
-    public function getVerboseNamePlural()
-    {
-        return UserModule::t('permissions');
-    }
 }
 

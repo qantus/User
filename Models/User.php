@@ -2,8 +2,8 @@
 
 namespace Modules\User\Models;
 
+use Mindy\Orm\Fields\HasManyField;
 use Modules\User\Components\PermissionTrait;
-use Modules\User\UserModule;
 
 /**
  * Class User
@@ -12,6 +12,17 @@ use Modules\User\UserModule;
  */
 class User extends UserBase
 {
+    public static function getFields()
+    {
+        return array_merge(parent::getFields(), [
+            'keys' => [
+                'class' => HasManyField::className(),
+                'modelClass' => Key::className(),
+                'editable' => false
+            ]
+        ]);
+    }
+
     public function getAbsoluteUrl()
     {
         return $this->reverse('user.view', ['id' => $this->pk]);

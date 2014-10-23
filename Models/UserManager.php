@@ -38,8 +38,15 @@ class UserManager extends Manager
         ], $extra));
 
         if ($model->save()) {
+            $groups = Group::objects()->filter(['is_default' => true])->all();
+            foreach($groups as $group) {
+                $model->groups->link($group);
+            }
+
             $permission = Permission::objects()->filter(['is_default' => true])->all();
-            $model->permissions->link($permission);
+            foreach($permission as $perm) {
+                $model->permissions->link($perm);
+            }
         }
         return $model;
     }

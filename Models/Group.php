@@ -25,6 +25,7 @@ class Group extends Model
             "description" => [
                 'class' => TextField::className(),
                 'verboseName' => UserModule::t("Description"),
+                'null' => true
             ],
             "is_locked" => [
                 'class' => BooleanField::className(),
@@ -42,7 +43,6 @@ class Group extends Model
             'permissions' => [
                 'class' => ManyToManyField::className(),
                 'modelClass' => Permission::className(),
-                'through' => GroupPermission::className(),
                 'verboseName' => UserModule::t("Permissions"),
             ],
             'users' => [

@@ -65,7 +65,7 @@ abstract class UserBase extends Model
             ],
             'profile' => [
                 'class' => ForeignField::className(),
-                'modelClass' => UserProfile::className(),
+                'modelClass' => Profile::className(),
                 'null' => true,
                 'verboseName' => UserModule::t("User profile"),
             ],
@@ -76,7 +76,7 @@ abstract class UserBase extends Model
             ],
             'groups' => [
                 'class' => ManyToManyField::className(),
-                'modelClass' => UserGroup::className(),
+                'modelClass' => Group::className(),
                 'verboseName' => UserModule::t("Groups"),
             ],
             'permissions' => [
@@ -97,15 +97,6 @@ abstract class UserBase extends Model
     public function __toString()
     {
         return (string)$this->username;
-    }
-
-    public function adminNames()
-    {
-        return array(
-            UserModule::t('Users'),
-            UserModule::t('Create user'),
-            UserModule::t('Update user')
-        );
     }
 
     public function getIsGuest()

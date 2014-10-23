@@ -50,19 +50,16 @@ class UserModule extends Module
                     'code' => 'UserAdmin',
                     'name' => self::t('Users'),
                     'adminClass' => 'UserAdmin',
-                    'icon' => 'icon-user'
                 ],
                 [
-                    'code' => 'UserGroupAdmin',
+                    'code' => 'GroupAdmin',
                     'name' => self::t('Groups'),
-                    'adminClass' => 'UserGroupAdmin',
-                    'icon' => 'icon-group'
+                    'adminClass' => 'GroupAdmin',
                 ],
                 [
                     'code' => 'PermissionAdmin',
                     'name' => self::t('Permissions'),
                     'adminClass' => 'PermissionAdmin',
-                    'icon' => 'icon-key'
                 ]
             ]
         ];

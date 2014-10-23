@@ -2,10 +2,12 @@
 
 namespace Modules\User\Components\Permissions;
 
+use Exception;
+use Mindy\Base\Generator;
+use Mindy\Base\Mindy;
 
-class MPermissionGenerator extends MGenerator
+class PermissionGenerator extends Generator
 {
-
     /**
      * Получаем actions всей системы и переформируем массив к виду 0 => 'perm.code'
      */
@@ -69,13 +71,14 @@ class MPermissionGenerator extends MGenerator
     }
 
     /**
+     * TODO refactoring
      * Runs the generator.
      * @return bool the items generated or false if failed.
      */
     public function run()
     {
-        $authManager = Yii::app()->getAuthManager();
-        $db = Yii::app()->db;
+        $authManager = Mindy::app()->getAuthManager();
+        $db = Mindy::app()->db;
 
         // Старт транзакции
         $transaction = $db->beginTransaction();
@@ -103,7 +106,7 @@ class MPermissionGenerator extends MGenerator
 
             $transaction->commit();
             return $generatedItems;
-        } catch (CDbException $e) {
+        } catch (Exception $e) {
             // Something went wrong, rollback
             $transaction->rollback();
             return false;

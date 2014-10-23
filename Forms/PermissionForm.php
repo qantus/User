@@ -3,41 +3,46 @@
 namespace Modules\User\Forms;
 
 use Mindy\Base\Mindy;
-use Mindy\Form\Fields\CheckboxField;
-use Mindy\Form\Fields\DropDownField;
-use Mindy\Form\Fields\TextField;
 use Mindy\Form\ModelForm;
 use Modules\User\Models\Permission;
+use Modules\User\UserModule;
 
 class PermissionForm extends ModelForm
 {
+    public function getFieldsets()
+    {
+        return [
+            UserModule::t('Main information') => ['code', 'name', 'bizrule'],
+            UserModule::t('Settings') => ['is_visible', 'is_locked', 'is_default', 'is_global', 'is_auto'],
+        ];
+    }
+
     public function getFields()
     {
         $model = $this->getModel();
+        $fields = $model->getFieldsInit();
 
-        $fields = [
-            'name' => [
-                'class' => TextField::className()
-            ],
-            'code' => [
-                'class' => TextField::className()
-            ],
-            'module' => [
-                'class' => TextField::className()
-            ],
-        ];
+        $formFields = [];
+        foreach ($fields as $name => $field) {
+            $tmp = $field->getFormField($this);
+            if ($tmp) {
+                $formFields[$name] = $tmp;
+            }
+        }
 
         $user = Mindy::app()->user;
 
-        if ($user && $user->is_superuser && $model->is_auto == 0) {
-            $fields['is_locked'] = ['class' => CheckboxField::className()];
+        if ($user) {
+            if (!$user->is_superuser) {
+                unset($formFields['is_global']);
+            }
+
+            if (!$user->is_superuser && $model->is_auto == 1) {
+                unset($formFields['is_locked']);
+            }
         }
 
-        if ($user && $user->is_superuser) {
-            $fields['is_global'] = ['class' => CheckboxField::className()];
-        }
-
-        return $fields;
+        return $formFields;
     }
 
     public function getModel()

@@ -2,16 +2,18 @@
 
 namespace Modules\User\Models;
 
-use Mindy\Orm\Fields\CharField;
-use Mindy\Orm\Fields\HasManyField;
-use Mindy\Orm\Fields\TextField;
 use Mindy\Orm\Fields\BooleanField;
+use Mindy\Orm\Fields\CharField;
 use Mindy\Orm\Fields\ManyToManyField;
+use Mindy\Orm\Fields\TextField;
 use Mindy\Orm\Model;
-use Modules\User\Components\Permissions\PermissionManager;
 use Modules\User\UserModule;
 
-class UserGroup extends Model
+/**
+ * Class Group
+ * @package Modules\User\Models
+ */
+class Group extends Model
 {
     public static function getFields()
     {
@@ -40,13 +42,14 @@ class UserGroup extends Model
             'permissions' => [
                 'class' => ManyToManyField::className(),
                 'modelClass' => Permission::className(),
-                'through' => UserGroupPermission::className(),
+                'through' => GroupPermission::className(),
                 'verboseName' => UserModule::t("Permissions"),
             ],
             'users' => [
                 'class' => ManyToManyField::className(),
                 'modelClass' => User::className(),
                 'verboseName' => UserModule::t("Users"),
+                'editable' => false
             ]
         ];
     }

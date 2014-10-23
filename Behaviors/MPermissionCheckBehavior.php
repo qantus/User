@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * TODO refactoring
+ * @DEPRECATED
+ * Class MPermissionCheckBehavior
+ */
 class MPermissionCheckBehavior extends CActiveRecordBehavior
 {
     public $can_view = 'can_view';
@@ -16,41 +21,39 @@ class MPermissionCheckBehavior extends CActiveRecordBehavior
     protected $_owner_class;
     protected $_owner_property;
 
-    protected function getIsNested(){
-        if (array_key_exists('nestedSet',$this->getOwner()->behaviors()))
-            return true;
-        else
-            return false;
+    protected function getIsNested()
+    {
+        return array_key_exists('nestedSet', $this->getOwner()->behaviors());
     }
 
-    protected function getIsBelongs(){
-        if ($this->relation)
-            return true;
-        else
-            return false;
+    protected function getIsBelongs()
+    {
+        return (bool) $this->relation;
     }
 
-    protected function belongsInit(){
-        if ($this->relation){
-            if (array_key_exists($this->relation,$this->getOwner()->relations())){
+    protected function belongsInit()
+    {
+        if ($this->relation) {
+            if (array_key_exists($this->relation, $this->getOwner()->relations())) {
                 $relations = $this->getOwner()->relations();
                 $relation = $relations[$this->relation];
 
-                $this->_owner_class =  $relation[1];
+                $this->_owner_class = $relation[1];
                 $this->_owner_property = $relation[2];
                 $this->_owner_id = $this->getOwnerProperty($relation[2]);
 
                 return true;
-            }else
-                return false;
-        }else
-            return false;
+            }
+        }
+
+        return false;
     }
 
-    protected function getOwnerProperty($property){
-        if (property_exists($this->getOwner(),$property) || array_key_exists($property,$this->getOwner()->attributes)){
+    protected function getOwnerProperty($property)
+    {
+        if (property_exists($this->getOwner(), $property) || array_key_exists($property, $this->getOwner()->attributes)) {
             return $this->getOwner()->{$property};
-        }else{
+        } else {
             return null;
         }
     }
@@ -60,10 +63,11 @@ class MPermissionCheckBehavior extends CActiveRecordBehavior
         throw new CHttpException(403, $message);
     }
 
-    public function route($action,$class = false)
+    public function route($action, $class = false)
     {
-        if (!$class)
+        if (!$class) {
             $class = get_class($this->getOwner());
+        }
 
         return $this->getOwner()->module . '.' . strtolower($class) . '.' . $action;
     }
@@ -72,53 +76,58 @@ class MPermissionCheckBehavior extends CActiveRecordBehavior
     {
         $can_nested = false;
 
-        if ($this->isNested){
+        if ($this->isNested) {
             $can_nested = $this->can_nested($action, $id, $class);
         }
 
         if ($id === null)
             $id = $this->getOwner()->primaryKey;
 
-        return $can_nested || Yii::app()->user->canObject($this->route($action,$class), $id);
+        return $can_nested || Yii::app()->user->canObject($this->route($action, $class), $id);
     }
 
-    public function can_nested($action, $id = null, $class = false){
+    public function can_nested($action, $id = null, $class = false)
+    {
         $parent_id = null;
 
-        if ($id === null){
+        if ($id === null) {
             $parent_id = $this->getOwnerProperty($this->parent_property);
-        }else{
-            if ($class){
+        } else {
+            if ($class) {
                 $model = new $class();
                 $model = $model->findByPk($id);
-            }else{
+            } else {
                 $model = $this->getOwner()->findByPk($id);
             }
-            if ($model && (property_exists($model,$this->parent_property) || array_key_exists($this->parent_property,$model->attributes)))
+            if ($model && (property_exists($model, $this->parent_property) || array_key_exists($this->parent_property, $model->attributes)))
                 $parent_id = $model->{$this->parent_property};
         }
 
-        if ($parent_id){
-            return Yii::app()->user->canObject($this->route($this->can_nested,$class), $parent_id) &&
-                Yii::app()->user->canObject($this->route($action,$class), $parent_id);
-        }else
+        if ($parent_id) {
+            return Yii::app()->user->canObject($this->route($this->can_nested, $class), $parent_id) &&
+            Yii::app()->user->canObject($this->route($action, $class), $parent_id);
+        } else
             return false;
     }
 
-    public function can_view($id = null, $class = false){
-        return $this->can($this->can_view,$id,$class);
+    public function can_view($id = null, $class = false)
+    {
+        return $this->can($this->can_view, $id, $class);
     }
 
-    public function can_update($id = null, $class = false){
-        return $this->can($this->can_update,$id,$class);
+    public function can_update($id = null, $class = false)
+    {
+        return $this->can($this->can_update, $id, $class);
     }
 
-    public function can_create($id = null, $class = false){
-        return $this->can($this->can_update,$id,$class);
+    public function can_create($id = null, $class = false)
+    {
+        return $this->can($this->can_update, $id, $class);
     }
 
-    public function can_delete($id = null, $class = false){
-        return $this->can($this->can_delete,$id,$class);
+    public function can_delete($id = null, $class = false)
+    {
+        return $this->can($this->can_delete, $id, $class);
     }
 
     public function beforeFind($event)
@@ -130,9 +139,10 @@ class MPermissionCheckBehavior extends CActiveRecordBehavior
         return $owner;
     }
 
-    public function afterFind($event){
+    public function afterFind($event)
+    {
 
-        if ($this->getIsNested()){
+        if ($this->getIsNested()) {
             $this->_old_parent_id = $this->getOwnerProperty('parent_id');
         }
     }
@@ -213,44 +223,46 @@ class MPermissionCheckBehavior extends CActiveRecordBehavior
         }
     }
 
-    public function nestedUpdateCheck(){
-        if ($this->getIsNested()){
+    public function nestedUpdateCheck()
+    {
+        if ($this->getIsNested()) {
             if (Yii::app()->user->isSuperuser)
                 return true;
-            if ($this->_old_parent_id != $this->getOwnerProperty($this->parent_property)){
+            if ($this->_old_parent_id != $this->getOwnerProperty($this->parent_property)) {
                 return false;
             }
             return true;
-        }else
+        } else
             return true;
     }
 
-    public function belongsCheck(){
-        if ($this->getIsBelongs()){
+    public function belongsCheck()
+    {
+        if ($this->getIsBelongs()) {
             if (Yii::app()->user->isSuperuser)
                 return true;
 
             $this->belongsInit();
 
-            if (!$this->can('can_update',$this->_owner_id,$this->_owner_class)){
+            if (!$this->can('can_update', $this->_owner_id, $this->_owner_class)) {
                 return false;
             }
             return true;
-        }else
+        } else
             return true;
     }
 
 
     public function beforeDelete($event)
     {
-        if ($this->getIsBelongs()){
-            if (!$this->belongsCheck()){
-                $this->getOwner()->addError($this->_owner_property,UserModule::t("You can't update objects in this category"));
+        if ($this->getIsBelongs()) {
+            if (!$this->belongsCheck()) {
+                $this->getOwner()->addError($this->_owner_property, UserModule::t("You can't update objects in this category"));
                 return false;
             }
             return true;
-        }else{
-            if($this->can($this->can_delete) == false) {
+        } else {
+            if ($this->can($this->can_delete) == false) {
                 $this->error();
             }
             return true;
@@ -259,29 +271,29 @@ class MPermissionCheckBehavior extends CActiveRecordBehavior
 
     public function beforeSave($event)
     {
-        if ($this->getIsBelongs()){
-            if (!$this->belongsCheck()){
-                $this->getOwner()->addError($this->_owner_property,UserModule::t("You can't update objects in this category"));
+        if ($this->getIsBelongs()) {
+            if (!$this->belongsCheck()) {
+                $this->getOwner()->addError($this->_owner_property, UserModule::t("You can't update objects in this category"));
                 $event->isValid = false;
                 return false;
             }
             return true;
-        }else{
+        } else {
 
-            if ($this->getOwner()->getIsNewRecord()){
-                if (!$this->can_create($this->getOwnerProperty($this->parent_property))){
-                    $this->getOwner()->addError('parent_id',UserModule::t("You can't create objects in this category"));
+            if ($this->getOwner()->getIsNewRecord()) {
+                if (!$this->can_create($this->getOwnerProperty($this->parent_property))) {
+                    $this->getOwner()->addError('parent_id', UserModule::t("You can't create objects in this category"));
                     $event->isValid = false;
                     return false;
                 }
 
                 return true;
-            }else{
+            } else {
                 if (!$this->can($this->can_update)) {
                     $this->error();
                     return false;
-                }elseif(!$this->nestedUpdateCheck()){
-                    $this->getOwner()->addError('parent_id',UserModule::t("You can't update category object"));
+                } elseif (!$this->nestedUpdateCheck()) {
+                    $this->getOwner()->addError('parent_id', UserModule::t("You can't update category object"));
                     $event->isValid = false;
                     return false;
                 }
@@ -290,25 +302,26 @@ class MPermissionCheckBehavior extends CActiveRecordBehavior
         }
     }
 
-    public function extendAdminSearch($MButtonColumn){
+    public function extendAdminSearch($MButtonColumn)
+    {
 
-        if (isset($MButtonColumn['template'])){
-            if (strpos($MButtonColumn['template'],'{perm}') === false){
+        if (isset($MButtonColumn['template'])) {
+            if (strpos($MButtonColumn['template'], '{perm}') === false) {
                 $MButtonColumn['template'] .= '{perm}';
             }
-        }else{
+        } else {
             $MButtonColumn['template'] = '{update}{delete}{perm}';
         }
 
 
-        if (isset($MButtonColumn['buttons'])){
+        if (isset($MButtonColumn['buttons'])) {
 
             if (isset($MButtonColumn['buttons']['update']))
                 if (isset($MButtonColumn['buttons']['update']['visible']))
                     $MButtonColumn['buttons']['update']['visible'] .= ' && $data->can_update()';
                 else
                     $MButtonColumn['buttons']['update']['visible'] = '$data->can_update()';
-            else{
+            else {
                 $MButtonColumn['buttons']['update'] = array();
                 $MButtonColumn['buttons']['update']['visible'] = '$data->can_update()';
             }
@@ -318,7 +331,7 @@ class MPermissionCheckBehavior extends CActiveRecordBehavior
                     $MButtonColumn['buttons']['delete']['visible'] .= ' && $data->can_delete()';
                 else
                     $MButtonColumn['buttons']['delete']['visible'] = '$data->can_delete()';
-            else{
+            else {
                 $MButtonColumn['buttons']['delete'] = array();
                 $MButtonColumn['buttons']['delete']['visible'] = '$data->can_delete()';
             }
@@ -331,7 +344,7 @@ class MPermissionCheckBehavior extends CActiveRecordBehavior
                     'visible' => 'Yii::app()->user->isSuperuser'
                 );
 
-        }else{
+        } else {
             $MButtonColumn['buttons'] = array(
                 'perm' => array(
                     'options' => array('class' => 'mmodal'),

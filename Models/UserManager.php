@@ -37,7 +37,10 @@ class UserManager extends Manager
             'activation_key' => $this->generateActivationKey()
         ], $extra));
 
-        $model->save();
+        if ($model->save()) {
+            $permission = Permission::objects()->filter(['is_default' => true])->all();
+            $model->permissions->link($permission);
+        }
         return $model;
     }
 

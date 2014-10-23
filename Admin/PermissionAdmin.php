@@ -12,15 +12,8 @@ class PermissionAdmin extends ModelAdmin
     public function getColumns()
     {
         return [
-            'id',
             'code',
             'name',
-            'is_auto',
-            'is_global',
-            'is_locked',
-            'type',
-            'bizrule',
-            'module'
         ];
     }
 

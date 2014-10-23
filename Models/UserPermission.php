@@ -14,7 +14,6 @@
 
 namespace Modules\User\Models;
 
-
 use Mindy\Orm\Fields\ForeignField;
 use Mindy\Orm\Model;
 use Modules\User\UserModule;

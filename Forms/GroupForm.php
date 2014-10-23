@@ -7,31 +7,39 @@ use Mindy\Form\Fields\DropDownField;
 use Mindy\Form\Fields\TextAreaField;
 use Mindy\Form\Fields\TextField;
 use Mindy\Form\ModelForm;
-use Modules\User\Models\UserGroup;
+use Modules\User\Models\Group;
+use Modules\User\UserModule;
 
 /**
- * Created by Studio107.
- * Date: 14.04.13
- * Time: 16:55
- * All rights reserved.
+ * Class GroupForm
+ * @package Modules\User\Forms
  */
-class UserGroupForm extends ModelForm
+class GroupForm extends ModelForm
 {
+    public function getFieldsets()
+    {
+        return [
+            UserModule::t('Main information') => ['name', 'description'],
+            UserModule::t('Settings') => ['is_visible', 'is_locked'],
+            UserModule::t('Permissions') => ['permissions'],
+        ];
+    }
+
     public function getFields()
     {
         return [
             'name' => TextField::className(),
+            'description' => TextAreaField::className(),
             'is_visible' => CheckboxField::className(),
             'is_locked' => CheckboxField::className(),
             'permissions' => [
                 'class' => DropDownField::className(),
             ],
-            'description' => TextAreaField::className()
         ];
     }
 
     public function getModel()
     {
-        return new UserGroup;
+        return new Group;
     }
 }

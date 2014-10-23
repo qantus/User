@@ -1,7 +1,6 @@
 <?php
+
 /**
- *
- *
  * All rights reserved.
  *
  * @author Falaleev Maxim
@@ -14,19 +13,22 @@
 
 namespace Modules\User\Models;
 
-
 use Mindy\Orm\Fields\ForeignField;
 use Mindy\Orm\Model;
 use Modules\User\UserModule;
 
-class UserGroupPermission extends Model
+/**
+ * Class GroupPermission
+ * @package Modules\User\Models
+ */
+class GroupPermission extends Model
 {
     public static function getFields()
     {
         return [
             'user_group' => [
                 'class' => ForeignField::className(),
-                'modelClass' => UserGroup::className(),
+                'modelClass' => Group::className(),
                 'verboseName' => UserModule::t("Group"),
             ],
             'permission' => [

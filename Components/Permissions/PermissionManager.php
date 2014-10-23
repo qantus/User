@@ -9,6 +9,7 @@ namespace Modules\User\Components\Permissions;
 use Mindy\Base\Mindy;
 use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
+use Modules\User\Models\GroupPermission;
 use Modules\User\Models\Permission;
 use Modules\User\Models\PermissionObjectThrough;
 use Modules\User\Models\User;
@@ -137,7 +138,7 @@ class PermissionManager
             $this->_userPerms[$code][] = $perm->user_id;
         }
 
-        $groupPerms = UserGroupPermission::objects()->filter(['permission__code__isnull' => false])->all();
+        $groupPerms = GroupPermission::objects()->filter(['permission__code__isnull' => false])->all();
         foreach($groupPerms as $perm) {
             $code = $perm->permission->code;
             $this->_groupPerms[$code][] = $perm->user_group_id;

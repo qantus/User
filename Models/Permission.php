@@ -24,44 +24,48 @@ class Permission extends Model
             "code" => [
                 'class' => CharField::className(),
                 'length' => 50,
-                'verboseName' => UserModule::t("Permission code"),
+                'verboseName' => UserModule::t("Key"),
+                'unique' => true,
+                'helpText' => UserModule::t("Rule code for developers to use in source code")
             ],
             "name" => [
                 'class' => CharField::className(),
                 'length' => 200,
-                'verboseName' => UserModule::t("Permission name"),
+                'verboseName' => UserModule::t("Name"),
+                'helpText' => UserModule::t("Rule name")
             ],
             "bizrule" => [
                 'class' => CharField::className(),
                 'length' => 255,
                 'null' => true,
-                'verboseName' => UserModule::t("Permission name")
-            ],
-            "module" => [
-                'class' => CharField::className(),
-                'length' => 30,
-                'verboseName' => UserModule::t("Module")
+                'verboseName' => UserModule::t("Bussines rule"),
+                'helpText' => UserModule::t("More info in documentation")
             ],
             "is_locked" => [
                 'class' => BooleanField::className(),
                 'verboseName' => UserModule::t("Is locked"),
+                'helpText' => UserModule::t("Locked for editing. Editing allowed only for super-administrator.")
             ],
             "is_auto" => [
                 'class' => BooleanField::className(),
                 'verboseName' => UserModule::t("Is auto"),
+                'helpText' => UserModule::t("Rule created automatically by module. Editing allowed only for super-administrator.")
             ],
             "is_visible" => [
                 'class' => BooleanField::className(),
                 'default' => true,
                 'verboseName' => UserModule::t("Is visible"),
+                'helpText' => UserModule::t('Rule is visible only to super-administrator')
             ],
             "is_default" => [
                 'class' => BooleanField::className(),
                 'verboseName' => UserModule::t("Is default"),
+                'helpText' => UserModule::t("Default rule. Rule applies to all users after creation")
             ],
             "is_global" => [
                 'class' => BooleanField::className(),
                 'verboseName' => UserModule::t("Is global"),
+                'helpText' => UserModule::t("Global rule. This type of rule has priority and overrides other rules. More info in documentation.")
             ],
         ];
     }
@@ -71,15 +75,6 @@ class Permission extends Model
         return [
             self::TYPE_USER => UserModule::t('User'),
             self::TYPE_GROUP => UserModule::t('Group'),
-        ];
-    }
-
-    public function adminNames()
-    {
-        return [
-            UserModule::t('Permissions'),
-            UserModule::t('Create permission'),
-            UserModule::t('Update permission: {name}', ["{name}" => $this->name])
         ];
     }
 }

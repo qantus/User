@@ -44,14 +44,4 @@ class UserAdmin extends ModelAdmin
     {
         return new User;
     }
-
-    public function getVerboseName()
-    {
-        return UserModule::t('user');
-    }
-
-    public function getVerboseNamePlural()
-    {
-        return UserModule::t('users');
-    }
 }

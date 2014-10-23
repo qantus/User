@@ -14,10 +14,29 @@
 
 namespace Modules\User\Tests;
 
+use Mindy\Tests\DatabaseTestCase;
+use Modules\User\Models\Group;
+use Modules\User\Models\GroupPermission;
+use Modules\User\Models\Key;
+use Modules\User\Models\Permission;
+use Modules\User\Models\Profile;
+use Modules\User\Models\Session;
+use Modules\User\Models\User;
+use Modules\User\Models\UserPermission;
 
-class UserBaseTest 
+abstract class UserBaseTest extends DatabaseTestCase
 {
-
+    protected function getModels()
+    {
+        return [
+            new User,
+            new Group,
+            new Permission,
+            new UserPermission,
+            new GroupPermission,
+            new Key,
+            new Profile,
+            new Session
+        ];
+    }
 }
-
- 

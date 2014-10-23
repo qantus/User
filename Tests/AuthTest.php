@@ -14,10 +14,26 @@
 
 namespace Modules\User\Tests;
 
+use Modules\User\Models\User;
 
-class AuthTest 
+class AuthTest extends UserBaseTest
 {
+    public function tearDown()
+    {
+        parent::tearDown();
+        $this->app->auth->logout();
+    }
 
+    public function testLogin()
+    {
+        /** @var \Modules\User\Components\Auth $auth */
+        $auth = $this->app->auth;
+        $username = 'foo';
+        $password = 'bar';
+        $user = User::objects()->createUser($username, $password, 'admin@admin.com');
+
+        $this->assertTrue($auth->getIsGuest());
+        $this->assertTrue($auth->login($user));
+        $this->assertFalse($auth->getIsGuest());
+    }
 }
-
- 

@@ -57,7 +57,7 @@ class Auth
      * This method overrides the parent implementation by starting session,
      * performing cookie-based authentication if enabled, and updating the flash variables.
      */
-    public function __construct()
+    public function init()
     {
         if ($this->getIsGuest() && $this->allowAutoLogin) {
             $this->restoreFromCookie();
@@ -92,8 +92,8 @@ class Auth
      */
     protected function renewCookie()
     {
-        $request = Mindy::app()->getRequest();
-        $cookies = $request->getCookies();
+        $request = Mindy::app()->getComponent('request');
+        $cookies = $request->cookies;
         $cookie = $cookies->itemAt($this->getStateKeyPrefix());
         if ($cookie && !empty($cookie->value) && ($data = Mindy::app()->getSecurityManager()->validateData($cookie->value)) !== false) {
             $data = @unserialize($data);
@@ -212,7 +212,7 @@ class Auth
 
         $this->recordAction(UserModule::t('User [[{url}|{name}]] logged in', [
             '{url}' => $model->getAbsoluteUrl(),
-            '{name}' => (string) $model
+            '{name}' => (string)$model
         ]), $model->getModuleName());
 
         return !$this->getIsGuest();
@@ -220,7 +220,8 @@ class Auth
 
     public function getIsGuest()
     {
-        return $this->getModel() === null;
+        $model = $this->getModel();
+        return $model === null || $model->pk === -1;
     }
 
     /**

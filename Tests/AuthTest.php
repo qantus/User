@@ -24,7 +24,7 @@ class AuthTest extends UserBaseTest
         $this->app->auth->logout();
     }
 
-    public function testLogin()
+    public function testLoginAndLogout()
     {
         /** @var \Modules\User\Components\Auth $auth */
         $auth = $this->app->auth;
@@ -35,5 +35,8 @@ class AuthTest extends UserBaseTest
         $this->assertTrue($auth->getIsGuest());
         $this->assertTrue($auth->login($user));
         $this->assertFalse($auth->getIsGuest());
+
+        $auth->logout();
+        $this->assertTrue($auth->getIsGuest());
     }
 }

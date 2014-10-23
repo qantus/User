@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\User\Components\Permissions;
+namespace Modules\User\Components;
 
 /*
  * @TODO: реализовать проверку на супер пользователя и разрешение для него абсолютно всех прав
@@ -11,12 +11,10 @@ use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
 use Modules\User\Models\GroupPermission;
 use Modules\User\Models\Permission;
-use Modules\User\Models\PermissionObjectThrough;
 use Modules\User\Models\User;
-use Modules\User\Models\UserGroupPermission;
 use Modules\User\Models\UserPermission;
 
-class PermissionManager
+class Permissions
 {
     use Accessors, Configurator;
 
@@ -104,11 +102,23 @@ class PermissionManager
     /**
      * @bool Отображение ошибок выполнения bizRule
      */
-    public $showErrors = true;
+    public $showErrors = YII_DEBUG;
+    /**
+     * @var bool Auto fetch data from database
+     */
+    public $autoFetch = true;
+
     /**
      * Инициализация компонента, получение всех прав доступа
      */
     public function init()
+    {
+        if ($this->autoFetch) {
+            $this->fetchData();
+        }
+    }
+
+    public function fetchData()
     {
         $this->getInitialData();
         $this->getInitialObjectsData();
@@ -127,19 +137,18 @@ class PermissionManager
                 'bizrule' => $dbPermissions[$i]['bizrule'],
                 'name' => $dbPermissions[$i]['name'],
                 'id' => $dbPermissions[$i]['id'],
-                'module' => $dbPermissions[$i]['module'],
                 'is_global' => $dbPermissions[$i]['is_global'],
             );
         }
 
         $userPerms = UserPermission::objects()->filter(['permission__code__isnull' => false])->all();
-        foreach($userPerms as $perm) {
+        foreach ($userPerms as $perm) {
             $code = $perm->permission->code;
             $this->_userPerms[$code][] = $perm->user_id;
         }
 
         $groupPerms = GroupPermission::objects()->filter(['permission__code__isnull' => false])->all();
-        foreach($groupPerms as $perm) {
+        foreach ($groupPerms as $perm) {
             $code = $perm->permission->code;
             $this->_groupPerms[$code][] = $perm->user_group_id;
         }
@@ -175,8 +184,8 @@ class PermissionManager
     {
         if (isset($this->_groupPerms[$code])) {
             $groups = $this->getUserGroups($userId);
-            foreach($groups as $id) {
-                if(in_array($id, $this->_groupPerms[$code])) {
+            foreach ($groups as $id) {
+                if (in_array($id, $this->_groupPerms[$code])) {
                     return true;
                 }
             }
@@ -217,8 +226,8 @@ class PermissionManager
          */
         if (isset($this->_groupPermsObjects[$code]) && isset($this->_groupPermsObjects[$code][$modelId])) {
             $groups = $this->getUserGroups($userId);
-            foreach($groups as $id => $name) {
-                if(in_array($id, $this->_groupPermsObjects[$code][$modelId])) {
+            foreach ($groups as $id => $name) {
+                if (in_array($id, $this->_groupPermsObjects[$code][$modelId])) {
                     return true;
                 }
             }
@@ -241,8 +250,8 @@ class PermissionManager
          * Проверяем сущесвуют ли такой код прав доступа и есть ли pk пользователя в разрешенных
          */
         return isset($this->_userPermsObjects[$code]) &&
-               isset($this->_userPermsObjects[$code][$modelId]) &&
-               in_array($userId, $this->_userPermsObjects[$code][$modelId]);
+        isset($this->_userPermsObjects[$code][$modelId]) &&
+        in_array($userId, $this->_userPermsObjects[$code][$modelId]);
     }
 
     /**
@@ -255,8 +264,8 @@ class PermissionManager
      */
     protected function canArray($codeArray, $userId, $params = [], $type = null)
     {
-        foreach($codeArray as $code) {
-            if(isset($this->_permissions[$code]) && $this->can($code, $userId, $params, $type) !== false) {
+        foreach ($codeArray as $code) {
+            if (isset($this->_permissions[$code]) && $this->can($code, $userId, $params, $type) !== false) {
                 return true;
             }
         }
@@ -275,8 +284,8 @@ class PermissionManager
      */
     protected function canArrayObject($codeArray, $modelId, $userId, $params = [], $type = null)
     {
-        foreach($codeArray as $code) {
-            if(isset($this->_permissions[$code]) && $this->canObject($code, $modelId, $userId, $params, $type) !== false) {
+        foreach ($codeArray as $code) {
+            if (isset($this->_permissions[$code]) && $this->canObject($code, $modelId, $userId, $params, $type) !== false) {
                 return true;
             }
         }
@@ -293,45 +302,7 @@ class PermissionManager
      */
     public function canGlobal($code)
     {
-        return isset($this->_permissions[$code]) && (int) $this->_permissions[$code]['is_global'] === self::IS_GLOBAL_PERMISSION;
-    }
-
-    /**
-     * Проверка прав доступа
-     * @param $code string код прав доступа
-     * @param $userId int pk пользователя
-     * @param array $params параметры для бизнес правил
-     * @return bool
-     */
-    public function can($code, $userId, $params = [], $type = null)
-    {
-        if(is_array($code)) {
-            return $this->canArray($code, $userId, $params, $type);
-        } else {
-            /**
-             * Проверяем глобально разрешенные действия без учета bizRule
-             */
-            if($this->canGlobal($code)) {
-                return true;
-            }
-
-            /**
-             * Проверяем права доступа текущего пользователя
-             */
-            $userCan = $this->canUser($code, $userId, $params, $type);
-
-            /**
-             * Если пользователю запрещено или у пользователя отсутствовали такой код прав доступа,
-             * проверяем права группы и выполняем бизнес правило
-             * Иначе сразу возвращаем результат чтобы не запрашивать права доступа
-             * и выполняем бизнес правило
-             */
-            if ($userCan === false) {
-                return $this->canGroup($code, $userId, $params, $type);
-            }
-
-            return $userCan;
-        }
+        return isset($this->_permissions[$code]) && (int)$this->_permissions[$code]['is_global'] === self::IS_GLOBAL_PERMISSION;
     }
 
     /**
@@ -344,13 +315,13 @@ class PermissionManager
      */
     public function canObject($code, $modelId, $userId, $params = [], $type = null)
     {
-        if(is_array($code)) {
+        if (is_array($code)) {
             return $this->canArrayObject($code, $modelId, $userId, $params, $type);
         } else {
             /**
              * Проверяем глобально разрешенные действия без учета bizRule
              */
-            if($this->canGlobal($code)) {
+            if ($this->canGlobal($code)) {
                 return true;
             }
 
@@ -396,7 +367,7 @@ class PermissionManager
     public function create($code, $name = null, $module = null)
     {
         $data = [];
-        if($module !== null) {
+        if ($module !== null) {
             $data = array(
                 'is_locked' => self::IS_LOCKED_PERMISSION,
                 'is_auto' => self::IS_AUTO_PERMISSION,
@@ -406,7 +377,7 @@ class PermissionManager
 
         $data['code'] = $code;
 
-        if($name !== null) {
+        if ($name !== null) {
             $data['name'] = $name;
         }
 
@@ -464,15 +435,6 @@ class PermissionManager
         return $this->set($model->code, $ownerId, $type);
     }
 
-    public function delete($code)
-    {
-        $count = Permission::objects()->filter([
-            'code' => $code,
-            'is_auto__lt' => self::IS_AUTO_PERMISSION
-        ])->delete();
-        return (int) $count > 0;
-    }
-
     /**
      * Права доступа на редактирование объекта
      * @param $object
@@ -528,13 +490,13 @@ class PermissionManager
         $db = Mindy::app()->db->createCommand();
 
         $canUser = $db->select('permission')
-            ->from($this->tablePerObjectPermission)
-            ->where('permission=:permission AND model_id=:pk AND model_class=:class AND type=:type', array(
-            'permission' => $permission,
-            'pk' => $pk,
-            'class' => $objectClassName,
-            'type' => self::TYPE_USER
-        ))->count() > 0;
+                ->from($this->tablePerObjectPermission)
+                ->where('permission=:permission AND model_id=:pk AND model_class=:class AND type=:type', array(
+                    'permission' => $permission,
+                    'pk' => $pk,
+                    'class' => $objectClassName,
+                    'type' => self::TYPE_USER
+                ))->count() > 0;
 
         if ($canUser === true) {
             return true;
@@ -543,11 +505,11 @@ class PermissionManager
                 ->from($this->tablePerObjectPermission)
                 ->where(array('in', 'owner_id', $this->getUserGroups()))
                 ->where('permission=:permission AND model_id=:pk AND model_class=:class AND type=:type', array(
-                'permission' => $permission,
-                'pk' => $pk,
-                'class' => $objectClassName,
-                'type' => self::TYPE_GROUP
-            ))
+                    'permission' => $permission,
+                    'pk' => $pk,
+                    'class' => $objectClassName,
+                    'type' => self::TYPE_GROUP
+                ))
                 ->queryColumn();
             return count($groupPerObjectPermissions) > 0;
         }
@@ -560,7 +522,7 @@ class PermissionManager
             ->from($this->tablePermission)
             ->where("code=:code", array('code' => $code))
             ->queryScalar();
-        return (int) $count > 0;
+        return (int)$count > 0;
     }
 
     /**
@@ -577,10 +539,10 @@ class PermissionManager
             ->from($this->tablePermissionLink . " permLink")
             ->join($this->tablePermission . " perm", "perm.id=permLink.permission_id", [])
             ->where("permLink.type=:type AND permLink.owner_id=:owner_id AND perm.code=:code",
-            array(
-                'owner_id' => $ownerId,
-                'type' => $type,
-                'code' => $code))
+                array(
+                    'owner_id' => $ownerId,
+                    'type' => $type,
+                    'code' => $code))
             ->queryScalar();
 
         return (int)$count;
@@ -619,9 +581,9 @@ class PermissionManager
         $permissions = [];
 
         foreach ($this->_permissions as $code => $data) {
-            if($data['module'] === null && Mindy::app()->hasModule($data['module'])) {
+            if ($data['module'] === null && Mindy::app()->hasModule($data['module'])) {
                 $name = Mindy::t(ucfirst($data['module']) . "Module.main", $data['name']);
-            } else if(empty($data['name'])) {
+            } else if (empty($data['name'])) {
                 $name = $code;
             } else {
                 $name = $data['name'];
@@ -631,21 +593,6 @@ class PermissionManager
         }
 
         return $permissions;
-    }
-
-    /**
-     * Очистка прав доступа по полученным критериям
-     * @param $ownerId
-     * @param $type
-     * @return int
-     */
-    public function clearAll($ownerId, $type)
-    {
-        return Mindy::app()->db->createCommand()
-            ->delete($this->tablePermissionLink, "owner_id=:owner_id AND type=:type", array(
-            'owner_id' => (int)$ownerId,
-            'type' => (int)$type
-        ));
     }
 
     /**
@@ -669,7 +616,7 @@ class PermissionManager
     public function getUserGroups($userId = null)
     {
         $user = Mindy::app()->getUser();
-        if($userId === null || $userId == $user->pk)
+        if ($userId === null || $userId == $user->pk)
             $groups = $user->groups->valuesList(['id'], true);
         else {
             $user = User::objects()->filter(['pk' => $userId]);
@@ -690,9 +637,20 @@ class PermissionManager
      * @return boolean whether the business rule returns true.
      * If the business rule is empty, it will still return true.
      */
-    public function executeBizRule($bizRule, $params)
+    public function executeBizRule($bizRule, array $params = [])
     {
-        return $bizRule === '' || $bizRule === null || ($this->showErrors ? eval($bizRule) != 0 : @eval($bizRule) != 0);
+        if ($bizRule === '' || $bizRule === null) {
+            return true;
+        } else {
+            if (strpos($bizRule, 'return ') === false) {
+                $bizRule = "return " . $bizRule;
+            }
+            $bizRule = 'extract($params);' . $bizRule;
+            if (substr($bizRule, -1) !== ';') {
+                $bizRule .= ';';
+            }
+            return $this->showErrors ? eval($bizRule) != 0 : @eval($bizRule) != 0;
+        }
     }
 
     /**
@@ -723,13 +681,6 @@ class PermissionManager
     }
 
     /**
-     * Saves the authorization data to persistent storage.
-     */
-    public function save()
-    {
-    }
-
-    /**
      * Заглушка для совместимости со стандартным поведением Yii
      * {@link MPermissionManager::can}
      */
@@ -754,5 +705,43 @@ class PermissionManager
     public function setPerm($code, $ownerId, $type)
     {
         return $this->set($code, $ownerId, $type);
+    }
+
+    /**
+     * Проверка прав доступа
+     * @param $code string код прав доступа
+     * @param $userId int pk пользователя
+     * @param array $params параметры для бизнес правил
+     * @return bool
+     */
+    public function can($code, $userId, $params = [], $type = null)
+    {
+        if (is_array($code)) {
+            return $this->canArray($code, $userId, $params, $type);
+        } else {
+            /**
+             * Проверяем глобально разрешенные действия без учета bizRule
+             */
+            if ($this->canGlobal($code)) {
+                return true;
+            }
+
+            /**
+             * Проверяем права доступа текущего пользователя
+             */
+            $userCan = $this->canUser($code, $userId, $params, $type);
+
+            /**
+             * Если пользователю запрещено или у пользователя отсутствовали такой код прав доступа,
+             * проверяем права группы и выполняем бизнес правило
+             * Иначе сразу возвращаем результат чтобы не запрашивать права доступа
+             * и выполняем бизнес правило
+             */
+            if ($userCan === false) {
+                return $this->canGroup($code, $userId, $params, $type);
+            }
+
+            return $userCan;
+        }
     }
 }

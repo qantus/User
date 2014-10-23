@@ -57,7 +57,7 @@ trait PermissionTrait
          * Проверяем данную операцию для пользователя в кеше
          */
         if (!$allowCaching || $cache->get($cacheId) === false) {
-            $access = $app->authManager->can($operation, $this->pk, $params, $type);
+            $access = $app->permissions->can($operation, $this->pk, $params, $type);
             if ($allowCaching) {
                 $cache->set($cacheId, (int)$access, 60 * 60 * 10);
             }
@@ -94,7 +94,7 @@ trait PermissionTrait
          * Проверяем данную операцию для пользователя в кеше
          */
         if (!$allowCaching || $cache->get($cacheId) === false) {
-            $access = $app->authManager->canObject($operation, $modelId, $this->pk, $params);
+            $access = $app->permissions->canObject($operation, $modelId, $this->pk, $params);
             if ($allowCaching) {
                 $cache->set($cacheId, (int)$access, 60 * 60 * 10);
             }

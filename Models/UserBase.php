@@ -4,17 +4,16 @@ namespace Modules\User\Models;
 
 use Mindy\Base\Mindy;
 use Mindy\Helper\Params;
-use Mindy\Orm\Fields\HasManyField;
-use Mindy\Orm\Fields\PasswordField;
-use Modules\User\Components\Permissions\PermissionManager;
-use Modules\User\Components\PermissionTrait;
 use Mindy\Orm\Fields\BooleanField;
 use Mindy\Orm\Fields\CharField;
 use Mindy\Orm\Fields\EmailField;
 use Mindy\Orm\Fields\ForeignField;
 use Mindy\Orm\Fields\IntField;
 use Mindy\Orm\Fields\ManyToManyField;
+use Mindy\Orm\Fields\PasswordField;
 use Mindy\Orm\Model;
+use Modules\User\Components\Permissions\PermissionManager;
+use Modules\User\Components\PermissionTrait;
 use Modules\User\UserModule;
 
 /**
@@ -130,7 +129,7 @@ abstract class UserBase extends Model
 
     public function beforeSave($owner, $isNew)
     {
-        if($isNew) {
+        if ($isNew) {
             $owner->activation_key = substr(md5(time() . $owner->username . $owner->pk), 0, 10);
         }
     }

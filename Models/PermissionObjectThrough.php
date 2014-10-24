@@ -18,7 +18,7 @@ namespace Modules\User\Models;
 use Mindy\Orm\Fields\ForeignField;
 use Mindy\Orm\Fields\IntField;
 use Mindy\Orm\Model;
-use Modules\User\Components\Permissions\PermissionManager;
+use Modules\User\Components\Permissions;
 use Modules\User\UserModule;
 
 class PermissionObjectThrough extends Model
@@ -33,8 +33,8 @@ class PermissionObjectThrough extends Model
             'type' => [
                 'class' => IntField::className(),
                 'choices' => [
-                    PermissionManager::TYPE_USER,
-                    PermissionManager::TYPE_GROUP,
+                    Permissions::TYPE_USER,
+                    Permissions::TYPE_GROUP,
                 ],
                 'verboseName' => UserModule::t("Type"),
             ],

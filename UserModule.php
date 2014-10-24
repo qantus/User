@@ -91,17 +91,4 @@ class UserModule extends Module
     {
         return Mindy::app()->urlManager->reverse($this->loginUrl);
     }
-
-    public static function preConfigure()
-    {
-        $app = Mindy::app();
-
-        $signal = $app->signal;
-        $signal->handler('\Modules\User\Models\Permission', 'afterSave', function($owner, $isNew) use ($app) {
-            $app->permissions->fetchData();
-        });
-        $signal->handler('\Modules\User\Models\Permission', 'afterDelete', function($owner) use ($app) {
-            $app->permissions->fetchData();
-        });
-    }
 }

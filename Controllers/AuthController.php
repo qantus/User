@@ -21,8 +21,10 @@ class AuthController extends CoreController
             $this->r->redirect('user.profile');
         }
 
+        $this->addBreadcrumb(UserModule::t("Login"));
+
         $form = new LoginForm();
-        if ($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->login()) {
+        if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->login()) {
             if ($this->r->isAjax) {
                 echo $this->json([
                     'status' => 'success',

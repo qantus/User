@@ -5,6 +5,7 @@ namespace Modules\User\Controllers;
 use Modules\Core\Controllers\CoreController;
 use Modules\User\Forms\RegistrationForm;
 use Modules\User\Models\User;
+use Modules\User\UserModule;
 
 class RegistrationController extends CoreController
 {
@@ -15,8 +16,10 @@ class RegistrationController extends CoreController
 
     public function actionIndex()
     {
+        $this->addBreadcrumb(UserModule::t("Registration"));
+
         $form = new RegistrationForm();
-        if($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->save()) {
+        if($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
             $this->r->redirect('user.registration_success');
         }
 

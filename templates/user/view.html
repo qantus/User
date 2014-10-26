@@ -1,0 +1,5 @@
+{% extends request.isAjax ? "ajax.html" : "user/base.html" %}
+
+{% block content %}
+    <h1>{{ model }}</h1>
+{% endblock %}

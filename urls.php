@@ -1,13 +1,6 @@
 <?php
 
 return [
-    '/{id:\d+}' => [
-        'name'   => 'view',
-        'params' => [
-            'id' => '(\d+)',
-        ],
-        'callback' => '\Modules\User\Controllers\UserController:view'
-    ],
     '/recover' => [
         'name'     => 'recover',
         'callback' => '\Modules\User\Controllers\RecoverController:index'
@@ -40,5 +33,9 @@ return [
     '/login' => [
         'name'     => 'login',
         'callback' => '\Modules\User\Controllers\AuthController:login'
+    ],
+    '/{username:\w+}' => [
+        'name'   => 'view',
+        'callback' => '\Modules\User\Controllers\UserController:view'
     ],
 ];

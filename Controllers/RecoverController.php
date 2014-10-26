@@ -13,9 +13,11 @@ class RecoverController extends CoreController
 {
     public function actionIndex()
     {
+        $this->addBreadcrumb(UserModule::t("Recover password"));
+
         $form = new RecoverForm();
         if ($this->r->isPost) {
-            if ($form->setAttributes($_POST)->isValid() && $form->send()) {
+            if ($form->populate($_POST)->isValid() && $form->send()) {
                 $this->r->flash->success(UserModule::t("Message was sended to your email"));
                 echo $this->render('user/recover_form_success.html');
                 Mindy::app()->end();
@@ -39,7 +41,7 @@ class RecoverController extends CoreController
             $form = new ChangePasswordForm([
                 'model' => $model
             ]);
-            if ($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->save()) {
+            if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
                 $this->r->flash->success(UserModule::t('Password changed'));
                 $this->r->redirect('user.login');
             } else {

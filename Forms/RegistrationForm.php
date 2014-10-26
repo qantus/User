@@ -7,7 +7,7 @@ use Mindy\Form\Fields\CharField;
 use Mindy\Form\Fields\EmailField;
 use Mindy\Form\Fields\PasswordField;
 use Mindy\Form\Form;
-use Mindy\Form\Validator\MinLengthValidator;
+use Mindy\Validation\MinLengthValidator;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 

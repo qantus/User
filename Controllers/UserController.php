@@ -23,13 +23,13 @@ class UserController extends CoreController
         return true;
     }
 
-    public function actionView($id)
+    public function actionView($username)
     {
-        $model = User::objects()->filter(['pk' => $id])->get();
+        $model = User::objects()->filter(['username' => $username])->get();
         if ($model === null) {
             $this->error(404);
         }
-        echo $this->render('user/view.twig', [
+        echo $this->render('user/view.html', [
             'model' => $model,
             'profile' => $model->profile,
         ]);

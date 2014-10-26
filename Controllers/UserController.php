@@ -5,6 +5,7 @@ namespace Modules\User\Controllers;
 use Mindy\Base\Mindy;
 use Mindy\Pagination\Pagination;
 use Modules\Core\Controllers\CoreController;
+use Modules\User\Forms\ChangePasswordForm;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
@@ -62,6 +63,28 @@ class UserController extends CoreController
         echo $this->render('user/profile.html', [
             'model' => $model,
             'profile' => $model->profile,
+        ]);
+    }
+
+    public function actionChangepassword()
+    {
+        $model = Mindy::app()->user;
+
+        $this->addBreadcrumb($model, $model->getAbsoluteUrl());
+        $this->addBreadcrumb(UserModule::t("Change password"));
+
+        $form = new ChangePasswordForm([
+            'model' => $model
+        ]);
+
+        if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
+            $this->r->flash->success(UserModule::t('Password changed'));
+            $this->r->redirect('user.login');
+        }
+
+        echo $this->render('user/change_password.html', [
+            'form' => $form,
+            'model' => $model
         ]);
     }
 }

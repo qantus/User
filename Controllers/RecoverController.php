@@ -45,7 +45,7 @@ class RecoverController extends CoreController
                 $this->r->flash->success(UserModule::t('Password changed'));
                 $this->r->redirect('user.login');
             } else {
-                echo $this->render('user/change_password.html', [
+                echo $this->render('user/recover_change_password.html', [
                     'form' => $form,
                     'model' => $model,
                     'key' => $key

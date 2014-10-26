@@ -17,7 +17,10 @@ return [
         'name'     => 'profile',
         'callback' => '\Modules\User\Controllers\UserController:profile',
     ],
-
+    '/password' => [
+        'name'     => 'change_password',
+        'callback' => '\Modules\User\Controllers\UserController:changepassword',
+    ],
     '/registration' => [
         'name'     => 'registration',
         'callback' => '\Modules\User\Controllers\RegistrationController:index'

@@ -8,9 +8,5 @@
             <th>{{ t('Last login', 'user') }}</th>
             <td>{{ model.last_login|date }}</td>
         </tr>
-        <tr>
-            <th>{{ t('Email', 'user') }}</th>
-            <td><a href="mailto:{{ model.email }}">{{ model.email }}</a></td>
-        </tr>
     </table>
 {% endblock %}

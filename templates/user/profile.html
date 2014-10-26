@@ -2,9 +2,8 @@
 
 {% block content %}
     <h1>{{ model }}</h1>
-    <p><a href="{% url 'user.logout' %}">{{ t('Logout', 'user') }}</a></p>
 
-    <table class="games-game-detail">
+    <table>
         <tr>
             <th>{{ t('Last login', 'user') }}</th>
             <td>{{ model.last_login|date }}</td>
@@ -14,4 +13,9 @@
             <td><a href="mailto:{{ model.email }}">{{ model.email }}</a></td>
         </tr>
     </table>
+
+    <p>
+        <a class="button" href="{% url 'user.change_password' %}">{{ t('Change password', 'user') }}</a>
+        <a class="button" href="{% url 'user.logout' %}">{{ t('Logout', 'user') }}</a>
+    </p>
 {% endblock %}

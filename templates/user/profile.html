@@ -3,4 +3,15 @@
 {% block content %}
     <h1>{{ model }}</h1>
     <p><a href="{% url 'user.logout' %}">{{ t('Logout', 'user') }}</a></p>
+
+    <table class="games-game-detail">
+        <tr>
+            <th>{{ t('Last login', 'user') }}</th>
+            <td>{{ model.last_login|date }}</td>
+        </tr>
+        <tr>
+            <th>{{ t('Email', 'user') }}</th>
+            <td><a href="mailto:{{ model.email }}">{{ model.email }}</a></td>
+        </tr>
+    </table>
 {% endblock %}

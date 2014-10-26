@@ -1,6 +1,10 @@
 <?php
 
 return [
+    '/' => [
+        'name' => 'list',
+        'callback' => '\Modules\User\Controllers\UserController:index'
+    ],
     '/recover' => [
         'name'     => 'recover',
         'callback' => '\Modules\User\Controllers\RecoverController:index'

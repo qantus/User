@@ -35,17 +35,9 @@ class AuthController extends CoreController
             }
         }
 
-        $data = [
+        echo $this->render('user/login.html', [
             'form' => $form
-        ];
-
-        if ($this->r->isAjax) {
-            echo $this->json([
-                'content' => $this->render('user/_login.html', $data)
-            ]);
-        } else {
-            echo $this->render('user/login.html', $data);
-        }
+        ]);
     }
 
     /**

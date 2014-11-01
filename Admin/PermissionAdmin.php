@@ -7,6 +7,10 @@ use Modules\User\Forms\PermissionForm;
 use Modules\User\Models\Permission;
 use Modules\User\UserModule;
 
+/**
+ * Class PermissionAdmin
+ * @package Modules\User
+ */
 class PermissionAdmin extends ModelAdmin
 {
     public function getColumns()

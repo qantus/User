@@ -11,7 +11,7 @@ use Modules\User\UserModule;
 
 /**
  * Class Group
- * @package Modules\User\Models
+ * @package Modules\User
  */
 class Group extends Model
 {

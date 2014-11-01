@@ -6,6 +6,10 @@ use Mindy\Base\Mindy;
 use Mindy\Controller\Filter;
 use ReflectionClass;
 
+/**
+ * Class PermissionControlFilter
+ * @package Modules\User
+ */
 class PermissionControlFilter extends Filter
 {
     protected $_allowedActions = [];

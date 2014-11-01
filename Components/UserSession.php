@@ -5,6 +5,10 @@ namespace Modules\User\Components;
 use Mindy\Session\HttpSession;
 use Modules\User\Models\Session;
 
+/**
+ * Class UserSession
+ * @package Modules\User
+ */
 class UserSession extends HttpSession
 {
     /**

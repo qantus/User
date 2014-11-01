@@ -9,6 +9,10 @@ use Modules\User\Forms\ChangePasswordForm;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
+/**
+ * Class UserController
+ * @package Modules\User
+ */
 class UserController extends CoreController
 {
     public function allowedActions()

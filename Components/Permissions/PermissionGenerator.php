@@ -6,6 +6,10 @@ use Exception;
 use Mindy\Base\Generator;
 use Mindy\Base\Mindy;
 
+/**
+ * Class PermissionGenerator
+ * @package Modules\User
+ */
 class PermissionGenerator extends Generator
 {
     /**

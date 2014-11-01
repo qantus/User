@@ -11,6 +11,10 @@ use Mindy\Form\Validator\MinLengthValidator;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
+/**
+ * Class UserForm
+ * @package Modules\User
+ */
 class UserForm extends ModelForm
 {
     public function getFieldsets()

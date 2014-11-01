@@ -14,6 +14,11 @@ use Mindy\Base\Mindy;
  * @site http://studio107.ru
  * @date 24/04/14.04.2014 22:01
  */
+
+/**
+ * Class PermissionTrait
+ * @package Modules\User
+ */
 trait PermissionTrait
 {
     /**

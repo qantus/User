@@ -9,8 +9,6 @@ use Mindy\Orm\Model;
 use Modules\User\UserModule;
 
 /**
- * 
- *
  * All rights reserved.
  * 
  * @author Falaleev Maxim
@@ -21,6 +19,10 @@ use Modules\User\UserModule;
  * @date 09/05/14.05.2014 14:00
  */
 
+/**
+ * Class Session
+ * @package Modules\User
+ */
 class Session extends Model
 {
     public static function getFields()

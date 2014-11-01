@@ -1,7 +1,6 @@
 <?php
+
 /**
- *
- *
  * All rights reserved.
  *
  * @author Falaleev Maxim
@@ -12,15 +11,6 @@
  * @date 16/06/14.06.2014 16:21
  */
 
-/**
- * CBaseUserIdentity class file
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @link http://www.yiiframework.com/
- * @copyright 2008-2013 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Modules\User\Components;
 
 use Mindy\Base\Interfaces\IUserIdentity;
@@ -28,26 +18,8 @@ use Mindy\Helper\Traits\BehaviorAccessors;
 use Mindy\Helper\Traits\Configurator;
 
 /**
- * CBaseUserIdentity is a base class implementing {@link IUserIdentity}.
- *
- * CBaseUserIdentity implements the scheme for representing identity
- * information that needs to be persisted. It also provides the way
- * to represent the authentication errors.
- *
- * Derived classes should implement {@link IUserIdentity::authenticate}
- * and {@link IUserIdentity::getId} that are required by the {@link IUserIdentity}
- * interface.
- *
- * @property mixed $id A value that uniquely represents the identity (e.g. primary key value).
- * The default implementation simply returns {@link name}.
- * @property string $name The display name for the identity.
- * The default implementation simply returns empty string.
- * @property array $persistentStates The identity states that should be persisted.
- * @property boolean $isAuthenticated Whether the authentication is successful.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @package system.web.auth
- * @since 1.0
+ * Class BaseUserIdentity
+ * @package Modules\User
  */
 abstract class BaseUserIdentity implements IUserIdentity
 {

@@ -2,10 +2,6 @@
 
 namespace Modules\User\Components;
 
-/*
- * @TODO: реализовать проверку на супер пользователя и разрешение для него абсолютно всех прав
- */
-
 use Mindy\Base\Mindy;
 use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
@@ -14,6 +10,10 @@ use Modules\User\Models\Permission;
 use Modules\User\Models\User;
 use Modules\User\Models\UserPermission;
 
+/**
+ * Class Permissions
+ * @package Modules\User
+ */
 class Permissions
 {
     use Accessors, Configurator;

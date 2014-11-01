@@ -11,6 +11,10 @@ use Mindy\Validation\MinLengthValidator;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
+/**
+ * Class RegistrationForm
+ * @package Modules\User
+ */
 class RegistrationForm extends Form
 {
     public function getFields()

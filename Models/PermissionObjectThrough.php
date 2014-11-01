@@ -14,13 +14,16 @@
 
 namespace Modules\User\Models;
 
-
 use Mindy\Orm\Fields\ForeignField;
 use Mindy\Orm\Fields\IntField;
 use Mindy\Orm\Model;
 use Modules\User\Components\Permissions;
 use Modules\User\UserModule;
 
+/**
+ * Class PermissionObjectThrough
+ * @package Modules\User
+ */
 class PermissionObjectThrough extends Model
 {
     public static function getFields()

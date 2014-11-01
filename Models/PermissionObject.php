@@ -5,9 +5,13 @@ namespace Modules\User\Models;
 use Mindy\Orm\Fields\BooleanField;
 use Mindy\Orm\Fields\CharField;
 use Mindy\Orm\Model;
-use Modules\User\Components\Permissions\PermissionManager;
+use Modules\User\Components\Permissions;
 use Modules\User\UserModule;
 
+/**
+ * Class PermissionObject
+ * @package Modules\User
+ */
 class PermissionObject extends Model
 {
     public static function getFields()
@@ -46,7 +50,7 @@ class PermissionObject extends Model
 
         $models = $this->objects()->filter(['model_id' => $id, 'model_class' => $modelName])->all();
         foreach ($models as $model) {
-            if ($model->type == PermissionManager::TYPE_USER) {
+            if ($model->type == Permissions::TYPE_USER) {
                 $users[$model->owner_id][] = $model->permission_id;
             } else {
                 $groups[$model->owner_id][] = $model->permission_id;
@@ -61,7 +65,7 @@ class PermissionObject extends Model
         return $this->objects()->filter(['model_id' => $id, 'model_class' => $modelName])->delete();
     }
 
-    public function setObjectPermissions($modelName, $id, $permissions, $owner_id, $type = PermissionManager::TYPE_USER)
+    public function setObjectPermissions($modelName, $id, $permissions, $owner_id, $type = Permissions::TYPE_USER)
     {
         if (is_array($permissions)) {
             foreach ($permissions as $permission) {

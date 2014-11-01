@@ -7,6 +7,10 @@ use Modules\Admin\Components\ModelAdmin;
 use Modules\User\Forms\UserForm;
 use Modules\User\Models\User;
 
+/**
+ * Class UserAdmin
+ * @package Modules\User
+ */
 class UserAdmin extends ModelAdmin
 {
     /**

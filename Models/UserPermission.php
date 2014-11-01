@@ -18,6 +18,10 @@ use Mindy\Orm\Fields\ForeignField;
 use Mindy\Orm\Model;
 use Modules\User\UserModule;
 
+/**
+ * Class UserPermission
+ * @package Modules\User
+ */
 class UserPermission extends Model
 {
     public static function getFields()

@@ -6,6 +6,10 @@ use Mindy\Helper\Password;
 use Mindy\Orm\Model;
 use Modules\User\Models\User;
 
+/**
+ * Class UserIdentity
+ * @package Modules\User
+ */
 class UserIdentity extends BaseUserIdentity
 {
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  *
@@ -14,13 +15,16 @@
 
 namespace Modules\User\Components;
 
-
 use Exception;
 use Mindy\Base\Mindy;
 use Mindy\Helper\Traits\Configurator;
 use Modules\User\Models\Session;
 use SessionHandler;
 
+/**
+ * Class DatabaseSessionHandler
+ * @package Modules\User
+ */
 class DatabaseSessionHandler extends SessionHandler
 {
     use Configurator;

@@ -9,6 +9,10 @@ use Modules\User\Forms\RecoverForm;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
+/**
+ * Class RecoverController
+ * @package Modules\User
+ */
 class RecoverController extends CoreController
 {
     public function actionIndex()

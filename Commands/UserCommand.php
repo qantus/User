@@ -7,6 +7,10 @@ use Mindy\Helper\Console;
 use Mindy\Helper\Password;
 use Modules\User\Models\User;
 
+/**
+ * Class UserCommand
+ * @package Modules\User
+ */
 class UserCommand extends ConsoleCommand
 {
     protected function getStdinLine()

@@ -6,8 +6,6 @@ use Mindy\Helper\Password;
 use Mindy\Orm\Manager;
 
 /**
- *
- *
  * All rights reserved.
  *
  * @author Falaleev Maxim
@@ -16,6 +14,11 @@ use Mindy\Orm\Manager;
  * @company Studio107
  * @site http://studio107.ru
  * @date 24/04/14.04.2014 21:05
+ */
+
+/**
+ * Class UserManager
+ * @package Modules\User
  */
 class UserManager extends Manager
 {

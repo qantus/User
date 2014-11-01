@@ -7,6 +7,10 @@ use Modules\User\Forms\RegistrationForm;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
+/**
+ * Class RegistrationController
+ * @package Modules\User
+ */
 class RegistrationController extends CoreController
 {
     public function allowedActions()

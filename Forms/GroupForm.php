@@ -12,7 +12,7 @@ use Modules\User\UserModule;
 
 /**
  * Class GroupForm
- * @package Modules\User\Forms
+ * @package Modules\User
  */
 class GroupForm extends ModelForm
 {

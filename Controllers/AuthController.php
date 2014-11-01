@@ -7,6 +7,10 @@ use Modules\Core\Controllers\CoreController;
 use Modules\User\Forms\LoginForm;
 use Modules\User\UserModule;
 
+/**
+ * Class AuthController
+ * @package Modules\User
+ */
 class AuthController extends CoreController
 {
     public function allowedActions()

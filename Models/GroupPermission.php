@@ -19,7 +19,7 @@ use Modules\User\UserModule;
 
 /**
  * Class GroupPermission
- * @package Modules\User\Models
+ * @package Modules\User
  */
 class GroupPermission extends Model
 {

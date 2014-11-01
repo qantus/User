@@ -7,6 +7,10 @@ use Mindy\Form\ModelForm;
 use Modules\User\Models\Permission;
 use Modules\User\UserModule;
 
+/**
+ * Class PermissionForm
+ * @package Modules\User
+ */
 class PermissionForm extends ModelForm
 {
     public function getFieldsets()

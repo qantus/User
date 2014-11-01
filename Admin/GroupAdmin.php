@@ -6,6 +6,10 @@ use Modules\Admin\Components\ModelAdmin;
 use Modules\User\Forms\GroupForm;
 use Modules\User\Models\Group;
 
+/**
+ * Class GroupAdmin
+ * @package Modules\User
+ */
 class GroupAdmin extends ModelAdmin
 {
     public function getColumns()

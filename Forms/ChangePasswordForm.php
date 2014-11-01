@@ -8,6 +8,10 @@ use Mindy\Validation\MinLengthValidator;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
+/**
+ * Class ChangePasswordForm
+ * @package Modules\User
+ */
 class ChangePasswordForm extends Form
 {
     private $_model;

@@ -11,6 +11,10 @@ use Mindy\Orm\Model;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
+/**
+ * Class Auth
+ * @package Modules\User
+ */
 class Auth
 {
     use Accessors, Configurator, UserActionsTrait;

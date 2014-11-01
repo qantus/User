@@ -10,6 +10,10 @@ use Mindy\Form\Form;
 use Modules\User\Components\UserIdentity;
 use Modules\User\UserModule;
 
+/**
+ * Class LoginForm
+ * @package Modules\User
+ */
 class LoginForm extends Form
 {
     private $_identity;
@@ -53,7 +57,7 @@ class LoginForm extends Form
     public function authenticate()
     {
         if($this->_identity === null) {
-            $this->_identity = new UserIdentity($this->username, $this->password);
+            $this->_identity = new UserIdentity($this->username->getValue(), $this->password->getValue());
         }
 
         if (!$this->_identity->authenticate()) {

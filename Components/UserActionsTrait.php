@@ -16,6 +16,10 @@ namespace Modules\User\Components;
 
 use Modules\Core\Components\UserLog;
 
+/**
+ * Class UserActionsTrait
+ * @package Modules\User
+ */
 trait UserActionsTrait
 {
     public static function recordAction($message, $moduleName)

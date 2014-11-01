@@ -6,6 +6,10 @@ use Mindy\Base\Mindy;
 use Mindy\Base\Module;
 use Modules\Core\CoreModule;
 
+/**
+ * Class UserModule
+ * @package Modules\User
+ */
 class UserModule extends Module
 {
     public $defaultController = 'users';

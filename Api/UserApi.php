@@ -5,6 +5,10 @@ namespace Modules\User\Api;
 use Modules\Api\Components\Api;
 use Modules\User\Models\User;
 
+/**
+ * Class UserApi
+ * @package Modules\User
+ */
 class UserApi extends Api
 {
     /**

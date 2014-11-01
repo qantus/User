@@ -6,7 +6,7 @@ use Mindy\Orm\Model;
 
 /**
  * Class Profile
- * @package Modules\User\Models
+ * @package Modules\User
  */
 class Profile extends Model
 {

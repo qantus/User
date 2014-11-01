@@ -9,6 +9,10 @@ use Mindy\Orm\Fields\IntField;
 use Mindy\Orm\Model;
 use Modules\User\UserModule;
 
+/**
+ * Class Permission
+ * @package Modules\User
+ */
 class Permission extends Model
 {
     const TYPE_USER = 0;

@@ -7,6 +7,10 @@ use Mindy\Orm\Fields\ForeignField;
 use Mindy\Orm\Model;
 use Modules\User\UserModule;
 
+/**
+ * Class Key
+ * @package Modules\User
+ */
 class Key extends Model
 {
     public static function getFields()

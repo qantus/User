@@ -9,6 +9,10 @@ use Mindy\Helper\Params;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
+/**
+ * Class RecoverForm
+ * @package Modules\User
+ */
 class RecoverForm extends Form
 {
     public function getFields()

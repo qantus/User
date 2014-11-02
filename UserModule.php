@@ -35,6 +35,16 @@ class UserModule extends Module
     // 3600 * 24 * $days
     public $loginDuration = 2592000;
 
+    public static function preConfigure()
+    {
+        $tpl = Mindy::app()->template;
+        $tpl->addHelper('gravatar', function ($user, $size = 80) {
+            $email = $user->email;
+            $default = "http://placehold.it/" . $size . "x" . $size;
+            return "http://www.gravatar.com/avatar/" . md5(strtolower(trim($email))) . "?d=" . urlencode($default) . "&s=" . $size;
+        });
+    }
+
     public function getVersion()
     {
         return '1.0';

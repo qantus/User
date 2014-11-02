@@ -48,7 +48,7 @@ class ChangePasswordForm extends Form
 
     public function cleanPassword_repeat($value)
     {
-        if ($this->password_create === $value) {
+        if ($this->password_create->getValue() === $value) {
             return $value;
         } else {
             $this->addError('password_repeat', 'Incorrect password repeat');

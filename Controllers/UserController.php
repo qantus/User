@@ -36,6 +36,10 @@ class UserController extends CoreController
             $this->error(404);
         }
 
+        if ($model->username == Mindy::app()->user->username) {
+            $this->r->redirect('user.profile');
+        }
+
         $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
         $this->addBreadcrumb($model);
 

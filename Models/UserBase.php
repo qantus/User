@@ -38,7 +38,8 @@ abstract class UserBase extends Model
             "email" => [
                 'class' => EmailField::className(),
                 'verboseName' => UserModule::t("Email"),
-                'unique' => true
+                'unique' => true,
+                'null' => true
             ],
             "password" => [
                 'class' => PasswordField::className(),

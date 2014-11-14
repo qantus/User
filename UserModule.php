@@ -12,27 +12,33 @@ use Modules\Core\CoreModule;
  */
 class UserModule extends Module
 {
-    public $defaultController = 'users';
-
+    /**
+     * @var \Modules\User\Models\Profile
+     */
+    public $profileModelClass = '\Modules\User\Models\Profile';
+    /**
+     * @var \Modules\User\Forms\ProfileForm
+     */
+    public $profileFormClass = '\Modules\User\Forms\ProfileForm';
     /**
      * @var array
      */
     public $config = [];
-
     /**
-     * @var int
-     * @desc Remember Me Time (seconds), defalt = 2592000 (30 days)
+     * @var int Remember Me Time (seconds), defalt = 2592000 (30 days)
      */
     public $rememberMeTime = 2592000; // 30 days
-
     /**
-     * @property string the name of the user model class.
+     * @var string the name of the user model class.
      */
     public $userClass = 'User';
-
+    /**
+     * @var string
+     */
     public $loginUrl = 'user.login';
-
-    // 3600 * 24 * $days
+    /**
+     * @var int 3600 * 24 * $days
+     */
     public $loginDuration = 2592000;
 
     public static function preConfigure()

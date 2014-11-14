@@ -110,4 +110,5 @@ return array(
     'Create user' => 'Создать пользователя',
     'Update user' => 'Редактирование пользователя',
     'Update user: {name}' => 'Редактирование пользователя: {name}',
+    'Update profile' => 'Изменить профиль',
 );

@@ -35,7 +35,7 @@ class ProfileController extends CoreController
         $formClass = $module->profileFormClass;
         $form = new $formClass;
         if ($this->request->isPost && $form->populate($_POST)->isValid() && $form->save()) {
-            $this->request->success(UserModule::t('Profile successfully updated'));
+            $this->request->flash->success(UserModule::t('Profile successfully updated'));
             $this->redirect($user);
         }
 

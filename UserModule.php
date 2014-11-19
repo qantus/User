@@ -49,6 +49,7 @@ class UserModule extends Module
             $default = "http://placehold.it/" . $size . "x" . $size;
             return "http://www.gravatar.com/avatar/" . md5(strtolower(trim($email))) . "?d=" . urlencode($default) . "&s=" . $size;
         });
+        $tpl->addHelper('login_form', ['\Modules\User\Helpers\UserHelper', 'render']);
 
         $signal = Mindy::app()->signal;
         $signal->handler('\Modules\User\Models\UserBase', 'createRawUser', function ($user, $password) {

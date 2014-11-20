@@ -12,7 +12,7 @@ use Mindy\Orm\Fields\IntField;
 use Mindy\Orm\Fields\ManyToManyField;
 use Mindy\Orm\Fields\PasswordField;
 use Mindy\Orm\Model;
-use Modules\User\Components\Permissions\PermissionManager;
+use Modules\User\Components\AuthTrait;
 use Modules\User\Components\PermissionTrait;
 use Modules\User\UserModule;
 
@@ -23,7 +23,7 @@ use Modules\User\UserModule;
  */
 abstract class UserBase extends Model
 {
-    use PermissionTrait;
+    use PermissionTrait, AuthTrait;
 
     const GUEST_ID = -1;
 
@@ -99,11 +99,6 @@ abstract class UserBase extends Model
     public function __toString()
     {
         return (string)$this->username;
-    }
-
-    public function getIsGuest()
-    {
-        return $this->pk == self::GUEST_ID;
     }
 
     public function notifyRegistration()

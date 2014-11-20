@@ -72,11 +72,11 @@ class Auth
         if ($this->getIsGuest()) {
             $guest = new User();
             $guest->setAttributes([
-                'id' => -1,
                 'username' => 'Guest',
                 'is_superuser' => false,
                 'is_staff' => false
             ]);
+            $guest->setIsGuest(true);
             $this->setModel($guest);
         }
 
@@ -209,7 +209,6 @@ class Auth
 
         if ($this->absoluteAuthTimeout) {
             $this->getStorage()->add(self::AUTH_ABSOLUTE_TIMEOUT_VAR, time() + $this->absoluteAuthTimeout);
-            d($this->getStorage()->get(self::AUTH_ABSOLUTE_TIMEOUT_VAR));
         }
 
         $this->setModel($model);
@@ -222,10 +221,19 @@ class Auth
         return !$this->getIsGuest();
     }
 
+    /**
+     * Check user is guest
+     * @return bool
+     */
     public function getIsGuest()
     {
         $model = $this->getModel();
-        return $model === null || $model->pk === -1;
+        if ($model === null) {
+            return true;
+        } else if (empty($model->pk)) {
+            return true;
+        }
+        return false;
     }
 
     /**

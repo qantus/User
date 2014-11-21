@@ -40,6 +40,10 @@ class UserModule extends Module
      * @var int 3600 * 24 * $days
      */
     public $loginDuration = 2592000;
+    /**
+     * @var bool
+     */
+    public $userList = true;
 
     public static function preConfigure()
     {

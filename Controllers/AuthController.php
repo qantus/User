@@ -29,6 +29,8 @@ class AuthController extends CoreController
 
         $form = new LoginForm();
         if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->login()) {
+            $this->redirectNext();
+
             if ($this->r->isAjax) {
                 echo $this->json([
                     'status' => 'success',

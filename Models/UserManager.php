@@ -41,10 +41,9 @@ class UserManager extends Manager
      * @param $password
      * @param $email
      * @param array $extra
-     * @param bool $notify
      * @return array|\Mindy\Orm\Model Errors or created model
      */
-    public function createUser($username, $password, $email = null, array $extra = [], $notify = true)
+    public function createUser($username, $password, $email = null, array $extra = [])
     {
         $model = $this->getModel();
         $model->setAttributes(array_merge([
@@ -64,10 +63,6 @@ class UserManager extends Manager
             foreach ($permission as $perm) {
                 $model->permissions->link($perm);
             }
-
-            if ($notify) {
-                $this->getEventManager()->send($model, 'createRawUser', $model, $password);
-            }
         }
 
         return $model;
@@ -77,13 +72,12 @@ class UserManager extends Manager
      * @param $password
      * @param null $email
      * @param array $extra
-     * @param bool $notify
      * @return array|\Mindy\Orm\Model
      */
-    public function createRandomUser($password, $email = null, array $extra = [], $notify = true)
+    public function createRandomUser($password, $email = null, array $extra = [])
     {
         $username = 'user_' . substr($this->generateActivationKey(), 0, 6);
-        return $this->createUser($username, $password, $email, $extra, $notify);
+        return $this->createUser($username, $password, $email, $extra);
     }
 
     /**
@@ -102,16 +96,15 @@ class UserManager extends Manager
      * @param $password
      * @param null $email
      * @param array $extra
-     * @param bool $notify
      * @return array|\Mindy\Orm\Model
      */
-    public function createSuperUser($username, $password, $email = null, array $extra = [], $notify = true)
+    public function createSuperUser($username, $password, $email = null, array $extra = [])
     {
         return $this->createUser($username, $password, $email, array_merge($extra, [
             'is_superuser' => true,
             'is_active' => true,
             'is_staff' => true
-        ]), $notify);
+        ]));
     }
 
     /**
@@ -119,14 +112,13 @@ class UserManager extends Manager
      * @param $password
      * @param null $email
      * @param array $extra
-     * @param bool $notify
      * @return array|\Mindy\Orm\Model
      */
-    public function createStaffUser($username, $password, $email = null, array $extra = [], $notify = true)
+    public function createStaffUser($username, $password, $email = null, array $extra = [])
     {
         return $this->createUser($username, $password, $email, array_merge($extra, [
             'is_staff' => true
-        ]), $notify);
+        ]));
     }
 
     /**

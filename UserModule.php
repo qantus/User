@@ -54,16 +54,6 @@ class UserModule extends Module
             return "http://www.gravatar.com/avatar/" . md5(strtolower(trim($email))) . "?d=" . urlencode($default) . "&s=" . $size;
         });
         $tpl->addHelper('login_form', ['\Modules\User\Helpers\UserHelper', 'render']);
-
-        $signal = Mindy::app()->signal;
-        $signal->handler('\Modules\User\Models\UserBase', 'createRawUser', function ($user, $password) {
-            if ($user->email) {
-                Mindy::app()->mail->fromCode('user.create_raw_user', $user->email, [
-                    'user' => $user,
-                    'password' => $password
-                ]);
-            }
-        });
     }
 
     public function getVersion()

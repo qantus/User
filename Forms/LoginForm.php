@@ -5,7 +5,7 @@ namespace Modules\User\Forms;
 use Mindy\Base\Mindy;
 use Mindy\Form\Fields\CheckboxField;
 use Mindy\Form\Fields\PasswordField;
-use Mindy\Form\Fields\TextField;
+use Mindy\Form\Fields\CharField;
 use Mindy\Form\Form;
 use Modules\User\Components\UserIdentity;
 use Modules\User\UserModule;
@@ -22,7 +22,7 @@ class LoginForm extends Form
     {
         return [
             'username' => [
-                'class' => TextField::className(),
+                'class' => CharField::className(),
                 'label' => UserModule::t('Username'),
                 'html' => [
                     'placeholder' => UserModule::t('Username')

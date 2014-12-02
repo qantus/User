@@ -40,7 +40,9 @@ class UserController extends CoreController
             $this->r->redirect('user.profile');
         }
 
-        $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+        if ($this->getModule()->userList) {
+            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+        }
         $this->addBreadcrumb($model);
 
         echo $this->render('user/view.html', [
@@ -51,7 +53,9 @@ class UserController extends CoreController
 
     public function actionIndex()
     {
-        $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+        if ($this->getModule()->userList) {
+            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+        }
 
         $qs = User::objects()->active();
         $pager = new Pagination($qs);
@@ -65,7 +69,9 @@ class UserController extends CoreController
     {
         $model = Mindy::app()->user;
 
-        $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+        if ($this->getModule()->userList) {
+            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+        }
         $this->addBreadcrumb($model);
 
         echo $this->render('user/profile.html', [
@@ -78,6 +84,9 @@ class UserController extends CoreController
     {
         $model = Mindy::app()->user;
 
+        if ($this->getModule()->userList) {
+            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+        }
         $this->addBreadcrumb($model, $model->getAbsoluteUrl());
         $this->addBreadcrumb(UserModule::t("Change password"));
 

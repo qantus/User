@@ -2,7 +2,6 @@
 
 namespace Modules\User\Components;
 
-use Mindy\Base\HttpCookie;
 use Mindy\Base\Mindy;
 use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
@@ -72,11 +71,11 @@ class Auth
         if ($this->getIsGuest()) {
             $guest = new User();
             $guest->setAttributes([
-                'id' => -1,
                 'username' => 'Guest',
                 'is_superuser' => false,
                 'is_staff' => false
             ]);
+            $guest->setIsGuest(true);
             $this->setModel($guest);
         }
 
@@ -104,6 +103,7 @@ class Auth
             if (is_array($data) && isset($data[0], $data[1])) {
                 list($id, $duration) = $data;
                 $model = $this->loadModel($id);
+                $model->setIsGuest(false);
                 $this->saveToCookie($model, $duration);
             }
         }
@@ -182,6 +182,7 @@ class Auth
             if (is_array($data) && isset($data[0], $data[1])) {
                 list($id, $duration) = $data;
                 if ($model = $this->loadModel($id)) {
+                    $model->setIsGuest(false);
                     $this->setModel($model);
 
                     if ($this->autoRenewCookie) {
@@ -209,9 +210,9 @@ class Auth
 
         if ($this->absoluteAuthTimeout) {
             $this->getStorage()->add(self::AUTH_ABSOLUTE_TIMEOUT_VAR, time() + $this->absoluteAuthTimeout);
-            d($this->getStorage()->get(self::AUTH_ABSOLUTE_TIMEOUT_VAR));
         }
 
+        $model->setIsGuest(false);
         $this->setModel($model);
 
         $this->recordAction(UserModule::t('User [[{url}|{name}]] logged in', [
@@ -222,10 +223,14 @@ class Auth
         return !$this->getIsGuest();
     }
 
+    /**
+     * Check user is guest
+     * @return bool
+     */
     public function getIsGuest()
     {
         $model = $this->getModel();
-        return $model === null || $model->pk === -1;
+        return $model === null || $model->getIsGuest();
     }
 
     /**

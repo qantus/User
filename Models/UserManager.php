@@ -22,6 +22,19 @@ use Mindy\Orm\Manager;
  */
 class UserManager extends Manager
 {
+    protected function getEventManager()
+    {
+        static $eventManager;
+        if ($eventManager === null) {
+            if (class_exists('\Mindy\Base\Mindy')) {
+                $eventManager = \Mindy\Base\Mindy::app()->getComponent('signal');
+            } else {
+                $eventManager = new \Mindy\Event\EventManager();
+            }
+        }
+        return $eventManager;
+    }
+
     /**
      * Create not privileged user
      * @param $username
@@ -30,7 +43,7 @@ class UserManager extends Manager
      * @param array $extra
      * @return array|\Mindy\Orm\Model Errors or created model
      */
-    public function createUser($username, $password, $email, array $extra = [])
+    public function createUser($username, $password, $email = null, array $extra = [])
     {
         $model = $this->getModel();
         $model->setAttributes(array_merge([
@@ -40,20 +53,37 @@ class UserManager extends Manager
             'activation_key' => $this->generateActivationKey()
         ], $extra));
 
-        if ($model->save()) {
+        if ($model->isValid() && $model->save()) {
             $groups = Group::objects()->filter(['is_default' => true])->all();
-            foreach($groups as $group) {
+            foreach ($groups as $group) {
                 $model->groups->link($group);
             }
 
             $permission = Permission::objects()->filter(['is_default' => true])->all();
-            foreach($permission as $perm) {
+            foreach ($permission as $perm) {
                 $model->permissions->link($perm);
             }
         }
+
         return $model;
     }
 
+    /**
+     * @param $password
+     * @param null $email
+     * @param array $extra
+     * @return array|\Mindy\Orm\Model
+     */
+    public function createRandomUser($password, $email = null, array $extra = [])
+    {
+        $username = 'user_' . substr($this->generateActivationKey(), 0, 6);
+        return $this->createUser($username, $password, $email, $extra);
+    }
+
+    /**
+     * @param $password
+     * @return bool
+     */
     public function setPassword($password)
     {
         return $this->getModel()->setAttributes([
@@ -61,7 +91,14 @@ class UserManager extends Manager
         ])->save(['password']);
     }
 
-    public function createSuperUser($username, $password, $email, array $extra = [])
+    /**
+     * @param $username
+     * @param $password
+     * @param null $email
+     * @param array $extra
+     * @return array|\Mindy\Orm\Model
+     */
+    public function createSuperUser($username, $password, $email = null, array $extra = [])
     {
         return $this->createUser($username, $password, $email, array_merge($extra, [
             'is_superuser' => true,
@@ -70,18 +107,31 @@ class UserManager extends Manager
         ]));
     }
 
-    public function createStaffUser($username, $password, $email, array $extra = [])
+    /**
+     * @param $username
+     * @param $password
+     * @param null $email
+     * @param array $extra
+     * @return array|\Mindy\Orm\Model
+     */
+    public function createStaffUser($username, $password, $email = null, array $extra = [])
     {
         return $this->createUser($username, $password, $email, array_merge($extra, [
             'is_staff' => true
         ]));
     }
 
+    /**
+     * @return string
+     */
     public function generateActivationKey()
     {
         return substr(md5(Password::generateSalt()), 0, 10);
     }
 
+    /**
+     * @return bool
+     */
     public function changeActivationKey()
     {
         return $this->getModel()->setAttributes([
@@ -89,6 +139,9 @@ class UserManager extends Manager
         ])->save(['activation_key']);
     }
 
+    /**
+     * @return Manager
+     */
     public function active()
     {
         return $this->filter(['is_active' => true]);

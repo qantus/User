@@ -4,7 +4,7 @@
     <div class="login-form">
         <h1>{{ t('Login', 'user') }}</h1>
 
-        <form action="" method="post">
+        <form action="{% url 'user.login' %}" method="post">
             {% csrf_token %}
             {{ form|safe }}
             <p class="right">

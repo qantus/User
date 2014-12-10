@@ -2,6 +2,7 @@
 
 namespace Modules\User\Models;
 
+use Mindy\Base\Mindy;
 use Mindy\Helper\Password;
 use Mindy\Orm\Manager;
 
@@ -45,11 +46,19 @@ class UserManager extends Manager
      */
     public function createUser($username, $password, $email = null, array $extra = [])
     {
+        /** @var \Modules\User\PasswordHasher\IPasswordHasher $hasher */
+        $auth = Mindy::app()->auth;
+        if (isset($extra['hash_type'])) {
+            $hasher = $auth->getPasswordHasher($extra['hash_type']);
+        } else {
+            $hasher = $auth->getPasswordHasher('mindy');
+        }
+
         $model = $this->getModel();
         $model->setAttributes(array_merge([
             'username' => $username,
             'email' => $email,
-            'password' => Password::hashPassword($password),
+            'password' => $hasher->hashPassword($password),
             'activation_key' => $this->generateActivationKey()
         ], $extra));
 
@@ -63,6 +72,8 @@ class UserManager extends Manager
             foreach ($permission as $perm) {
                 $model->permissions->link($perm);
             }
+
+            $this->getEventManager()->send($model, 'createRawUser', $model, $password);
         }
 
         return $model;
@@ -84,10 +95,14 @@ class UserManager extends Manager
      * @param $password
      * @return bool
      */
-    public function setPassword($password)
+    public function setPassword($password, $hasherType = null)
     {
+        /** @var \Modules\User\PasswordHasher\IPasswordHasher $hasher */
+        $auth = Mindy::app()->auth;
+        $hasher = $auth->getPasswordHasher($hasherType !== null ? $hasherType : 'mindy');
+
         return $this->getModel()->setAttributes([
-            'password' => Password::hashPassword($password)
+            'password' => $hasher->hashPassword($password)
         ])->save(['password']);
     }
 

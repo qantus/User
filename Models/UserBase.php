@@ -87,6 +87,12 @@ abstract class UserBase extends Model
                 'through' => UserPermission::className(),
                 'verboseName' => UserModule::t("Permissions"),
             ],
+            'hash_type' => [
+                'class' => CharField::className(),
+                'default' => 'mindy',
+                'editable' => false,
+                'verboseName' => UserModule::t("Password hash strategy"),
+            ],
             'key' => [
                 'class' => ForeignField::className(),
                 'modelClass' => Key::className(),

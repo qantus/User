@@ -11,11 +11,11 @@
  * @date 09/12/14 21:03
  */
 
-namespace Modules\User\Components\HashStrategy;
+namespace Modules\User\PasswordHasher;
 
 use Mindy\Helper\Password;
 
-class BlueFishStrategy implements IHashStrategy
+class MindyPasswordHasher implements IPasswordHasher
 {
     /**
      * @return string random
@@ -35,9 +35,9 @@ class BlueFishStrategy implements IHashStrategy
     }
 
     /**
-     * @param $password1 string
-     * @param $password2 string
-     * @return string
+     * @param string $password
+     * @param string $hash
+     * @return bool|string
      */
     public function verifyPassword($password, $hash)
     {

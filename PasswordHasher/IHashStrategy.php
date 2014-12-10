@@ -10,13 +10,13 @@
  * @date 09/12/14 21:04
  */
 
-namespace Modules\User\Components\HashStrategy;
+namespace Modules\User\PasswordHasher;
 
 /**
  * Interface IHashStrategy
- * @package Modules\User\Components\HashStrategy
+ * @package Modules\User\PasswordHasher
  */
-interface IHashStrategy
+interface IPasswordHasher
 {
     /**
      * @return string random

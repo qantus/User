@@ -2,7 +2,9 @@
 
 namespace Modules\User\Components;
 
+use Exception;
 use Mindy\Base\Mindy;
+use Mindy\Helper\Creator;
 use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
 use Mindy\Http\Cookie;
@@ -21,12 +23,18 @@ class Auth
     const AUTH_TIMEOUT_VAR = '__timeout';
     const AUTH_ABSOLUTE_TIMEOUT_VAR = '__absolute_timeout';
 
+    /**
+     * @var bool
+     */
     public $autoRenewCookie = true;
-
+    /**
+     * @var bool
+     */
     public $allowAutoLogin = true;
-
+    /**
+     * @var string
+     */
     public $modelClass = '\Modules\User\Models\User';
-
     /**
      * @var integer timeout in seconds after which user is logged out if inactive.
      * If this property is not set, the user will be logged out after the current session expires
@@ -34,26 +42,36 @@ class Auth
      * @since 1.1.7
      */
     public $authTimeout;
-
     /**
      * @var integer timeout in seconds after which user is logged out regardless of activity.
      * @since 1.1.14
      */
     public $absoluteAuthTimeout;
-
+    /**
+     * Password hashers
+     * @var array name => className
+     */
+    public $passwordHashers = [
+        'mindy' => '\Modules\User\PasswordHasher\MindyPasswordHasher',
+    ];
     /**
      * @var array the property values (in name-value pairs) used to initialize the identity cookie.
      * Any property of {@link CHttpCookie} may be initialized.
      * This property is effective only when {@link allowAutoLogin} is true.
      */
     public $identityCookie;
-
     /**
      * @var null|Model
      */
     private $_model;
-
+    /**
+     * @var
+     */
     private $_keyPrefix;
+    /**
+     * @var array
+     */
+    private $_passwordHashers = [];
 
     /**
      * Initializes the application component.
@@ -287,5 +305,20 @@ class Auth
     public function getModel()
     {
         return $this->_model;
+    }
+
+    public function getPasswordHasher($name)
+    {
+        if (isset($this->passwordHashers[$name])) {
+            if (!isset($this->_passwordHashers[$name])) {
+                $this->_passwordHashers[$name] = Creator::createObject([
+                    'class' => $this->passwordHashers[$name]
+                ]);
+            }
+
+            return $this->_passwordHashers[$name];
+        } else {
+            throw new Exception("Unknown password hasher");
+        }
     }
 }

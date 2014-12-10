@@ -11,11 +11,11 @@
  * @date 09/12/14 21:09
  */
 
-namespace Modules\User\Components\HashStrategy;
+namespace Modules\User\PasswordHasher;
 
 use Mindy\Helper\Password;
 
-class BitrixStrategy implements IHashStrategy
+class BitrixPasswordHasher implements IPasswordHasher
 {
     /**
      * @return string random

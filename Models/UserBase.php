@@ -12,6 +12,7 @@ use Mindy\Orm\Fields\IntField;
 use Mindy\Orm\Fields\ManyToManyField;
 use Mindy\Orm\Fields\PasswordField;
 use Mindy\Orm\Model;
+use Mindy\Validation\UniqueValidator;
 use Modules\User\Components\AuthTrait;
 use Modules\User\Components\PermissionTrait;
 use Modules\User\UserModule;
@@ -40,8 +41,7 @@ abstract class UserBase extends Model
             "email" => [
                 'class' => EmailField::className(),
                 'verboseName' => UserModule::t("Email"),
-                'unique' => true,
-                'null' => true
+                'null' => true,
             ],
             "password" => [
                 'class' => PasswordField::className(),

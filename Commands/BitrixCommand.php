@@ -14,99 +14,29 @@
 namespace Modules\User\Commands;
 
 use Mindy\Console\ConsoleCommand;
-use Mindy\Orm\Fields\CharField;
-use Mindy\Orm\Fields\DateField;
-use Mindy\Orm\Fields\EmailField;
-use Mindy\Orm\Fields\TextField;
-use Mindy\Orm\Model;
-
-class BitrixUser extends Model
-{
-    public static function getFields()
-    {
-        return [
-            'LOGIN' => [
-                'class' => CharField::className(),
-            ],
-            'PASSWORD' => [
-                'class' => CharField::className(),
-            ],
-            'CHECKWORD' => [
-                'class' => CharField::className(),
-            ],
-            'NAME' => [
-                'class' => CharField::className(),
-            ],
-            'LAST_NAME' => [
-                'class' => CharField::className(),
-            ],
-            'SECOND_NAME' => [
-                'class' => CharField::className(),
-            ],
-            'EMAIL' => [
-                'class' => EmailField::className(),
-            ],
-            'EXTERNAL_AUTH_ID' => [
-                'class' => CharField::className(),
-            ],
-            'XML_ID' => [
-                'class' => CharField::className(),
-            ],
-            'PERSONAL_COUNTRY' => [
-                'class' => CharField::className(),
-            ],
-            'PERSONAL_PHONE' => [
-                'class' => CharField::className(),
-            ],
-            'PERSONAL_MOBILE' => [
-                'class' => CharField::className(),
-            ],
-            'PERSONAL_CITY' => [
-                'class' => CharField::className(),
-            ],
-            'ACTIVE' => [
-                'class' => CharField::className(),
-            ],
-            'PERSONAL_BIRTHDAY' => [
-                'class' => DateField::className(),
-            ],
-            'PERSONAL_NOTES' => [
-                'class' => TextField::className(),
-            ],
-            'PERSONAL_STREET' => [
-                'class' => TextField::className(),
-            ]
-        ];
-    }
-
-    public static function tableName()
-    {
-        return 'b_user';
-    }
-
-    public function getIsActive()
-    {
-        return $this->ACTIVE == 'Y';
-    }
-}
+use Modules\User\Models\Profile;
+use Modules\User\Models\User;
 
 class BitrixCommand extends ConsoleCommand
 {
-    public function actionIndex()
+    public function actionMigrate()
     {
-        $total = BitrixUser::objects()->count();
-        echo "Total: ", $total;
-        foreach (BitrixUser::objects()->limit(1000)->all() as $i => $user) {
-            $this->getProgressBar($i, $total);
-        }
-    }
+        foreach (BitrixUser::objects()->batch(30) as $models) {
+            foreach ($models as $model) {
+                $user = new User([
+                    'username' => $model->LOGIN,
+                    'email' => $model->EMAIL,
+                    'is_active' => $model->getIsActive(),
+                    'password' => $model->PASSWORD,
+                    'hash_type' => 'bitrix'
+                ]);
+                $user->save();
 
-    public function getProgressBar($done, $total)
-    {
-        $perc = ($done / $total) * 100;
-        $bar = "[" . str_repeat("=", $perc);
-        $bar = substr($bar, 0, strlen($bar) - 1) . ">"; // Change the last = to > for aesthetics
-        $bar .= str_repeat(" ", 100 - $perc) . "] - $perc% - $done/$total";
-        echo "$bar\r"; // Note the \r. Put the cursor at the beginning of the line
+                $profile = new Profile();
+            }
+        }
+
+        echo 'Memory in use: ' . memory_get_usage() . ' (' . memory_get_usage() / 1024 / 1024 . 'M)' . PHP_EOL;
+        echo 'Peak usage: ' . memory_get_peak_usage() . ' (' . memory_get_peak_usage() / 1024 / 1024 . 'M)' . PHP_EOL;
     }
 }

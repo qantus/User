@@ -6,6 +6,7 @@ return array (
   'Password changed' => 'Пароль изменен',
   'Logout' => 'Выйти',
   'Login' => 'Вход',
+  'Login on site'=> 'Вход на сайт',
   'Lost password?' => 'Забыли пароль?',
   'Update profile' => 'Изменить профиль',
   'Profile successfully updated' => 'Профиль успешно обновлен',

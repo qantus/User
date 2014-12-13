@@ -56,7 +56,8 @@ class UserModule extends Module
 
     public static function preConfigure()
     {
-        $tpl = Mindy::app()->template;
+        $app = Mindy::app();
+        $tpl = $app->template;
         $tpl->addHelper('gravatar', function ($user, $size = 80) {
             $email = $user->email;
             $default = "http://placehold.it/" . $size . "x" . $size;
@@ -64,11 +65,17 @@ class UserModule extends Module
         });
         $tpl->addHelper('login_form', ['\Modules\User\Helpers\UserHelper', 'render']);
 
-        $signal = Mindy::app()->signal;
+        $signal = $app->signal;
 
         if ($this->sendUserCreateRawMail) {
-            $signal->handler('\Modules\User\Models\UserBase', 'createUser', function ($user) {
-                // TODO
+            $signal->handler('\Modules\User\Models\UserBase', 'createUser', function ($user) use ($app) {
+                $app->mail->fromCode('user.registration', $this->email->getValue(), [
+                    'data' => $model,
+                    'site' => $app->getModule('Sites')->getSite(),
+                    'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user.registration_activation', [
+                            'key' => $model->activation_key
+                        ]))
+                ]);
             });
         }
         

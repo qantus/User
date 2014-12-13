@@ -80,8 +80,6 @@ class RegistrationForm extends Form
     {
         $model = User::objects()->createUser($this->username->getValue(), $this->password->getValue(), $this->email->getValue());
         if ($model->hasErrors() === false) {
-            $app = Mindy::app();
-            $app->signal->send($model, 'createUser', $model);
             return $model;
         }
         return false;

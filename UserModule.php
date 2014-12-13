@@ -66,29 +66,23 @@ class UserModule extends Module
         $tpl->addHelper('login_form', ['\Modules\User\Helpers\UserHelper', 'render']);
 
         $signal = $app->signal;
-
-        if ($this->sendUserCreateRawMail) {
-            $signal->handler('\Modules\User\Models\UserBase', 'createUser', function ($user) use ($app) {
-                $app->mail->fromCode('user.registration', $this->email->getValue(), [
-                    'data' => $model,
-                    'site' => $app->getModule('Sites')->getSite(),
-                    'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user.registration_activation', [
-                            'key' => $model->activation_key
-                        ]))
+        $signal->handler('\Modules\User\Models\UserBase', 'createUser', function ($user) use ($app) {
+            $app->mail->fromCode('user.registration', $user->email, [
+                'data' => $user,
+                'site' => $app->getModule('Sites')->getSite(),
+                'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user.registration_activation', [
+                        'key' => $user->activation_key
+                    ]))
+            ]);
+        });
+        $signal->handler('\Modules\User\Models\UserBase', 'createRawUser', function ($user, $password) {
+            if (!Console::isCli() && $user->email) {
+                Mindy::app()->mail->fromCode('user.create_raw_user', $user->email, [
+                    'user' => $user,
+                    'password' => $password
                 ]);
-            });
-        }
-        
-        if ($this->sendUserCreateRawMail) {
-            $signal->handler('\Modules\User\Models\UserBase', 'createRawUser', function ($user, $password) {
-                if (!Console::isCli() && $user->email) {
-                    Mindy::app()->mail->fromCode('user.create_raw_user', $user->email, [
-                        'user' => $user,
-                        'password' => $password
-                    ]);
-                }
-            });
-        }
+            }
+        });
     }
 
     public function getVersion()

@@ -78,7 +78,7 @@ class UserModule extends Module
         $signal->handler('\Modules\User\Models\UserBase', 'createRawUser', function ($user, $password) {
             if (!Console::isCli() && $user->email) {
                 Mindy::app()->mail->fromCode('user.create_raw_user', $user->email, [
-                    'user' => $user,
+                    'data' => $user,
                     'password' => $password
                 ]);
             }

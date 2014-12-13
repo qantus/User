@@ -72,7 +72,6 @@ class UserManager extends Manager
             foreach ($permission as $perm) {
                 $model->permissions->link($perm);
             }
-
             $eventManager = $this->getEventManager();
             $module = Mindy::app()->getModule('User');
             if ($module->sendUserCreateMail) {

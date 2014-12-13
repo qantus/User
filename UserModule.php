@@ -45,6 +45,14 @@ class UserModule extends Module
      * @var bool
      */
     public $userList = true;
+    /**
+     * @var bool
+     */    
+    public $sendUserCreateMail = true;
+    /**
+     * @var bool
+     */
+    public $sendUserCreateRawMail = false;
 
     public static function preConfigure()
     {
@@ -57,14 +65,23 @@ class UserModule extends Module
         $tpl->addHelper('login_form', ['\Modules\User\Helpers\UserHelper', 'render']);
 
         $signal = Mindy::app()->signal;
-        $signal->handler('\Modules\User\Models\UserBase', 'createRawUser', function ($user, $password) {
-            if (!Console::isCli() && $user->email) {
-                Mindy::app()->mail->fromCode('user.create_raw_user', $user->email, [
-                    'user' => $user,
-                    'password' => $password
-                ]);
-            }
-        });
+
+        if ($this->sendUserCreateRawMail) {
+            $signal->handler('\Modules\User\Models\UserBase', 'createUser', function ($user) {
+                // TODO
+            });
+        }
+        
+        if ($this->sendUserCreateRawMail) {
+            $signal->handler('\Modules\User\Models\UserBase', 'createRawUser', function ($user, $password) {
+                if (!Console::isCli() && $user->email) {
+                    Mindy::app()->mail->fromCode('user.create_raw_user', $user->email, [
+                        'user' => $user,
+                        'password' => $password
+                    ]);
+                }
+            });
+        }
     }
 
     public function getVersion()

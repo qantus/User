@@ -47,7 +47,7 @@ class RegistrationForm extends Form
 
     public function cleanPassword_repeat($value)
     {
-        if ($this->password === $value) {
+        if ($this->password->getValue() === $value) {
             return $value;
         } else {
             $this->addError('password_repeat', 'Incorrect password repeat');

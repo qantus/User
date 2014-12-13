@@ -81,13 +81,7 @@ class RegistrationForm extends Form
         $model = User::objects()->createUser($this->username->getValue(), $this->password->getValue(), $this->email->getValue());
         if ($model->hasErrors() === false) {
             $app = Mindy::app();
-            $app->mail->fromCode('user.registration', $this->email->getValue(), [
-                'data' => $model,
-                'site' => $app->getModule('Sites')->getSite(),
-                'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user.registration_activation', [
-                        'key' => $model->activation_key
-                    ]))
-            ]);
+            $app->signal->send($model, 'createUser', $model);
             return $model;
         }
         return false;

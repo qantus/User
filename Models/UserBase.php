@@ -30,8 +30,6 @@ abstract class UserBase extends Model
 
     public static function getFields()
     {
-        $module = Mindy::app()->getModule(self::getModuleName());
-        $profileModelClass = $module->profileModelClass;
         return [
             "username" => [
                 'class' => CharField::className(),
@@ -64,12 +62,6 @@ abstract class UserBase extends Model
             "is_superuser" => [
                 'class' => BooleanField::className(),
                 'verboseName' => UserModule::t("Is superuser"),
-            ],
-            'profile' => [
-                'class' => ForeignField::className(),
-                'modelClass' => $profileModelClass,
-                'null' => true,
-                'verboseName' => UserModule::t("User profile"),
             ],
             'last_login' => [
                 'class' => IntField::className(),

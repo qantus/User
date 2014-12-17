@@ -14,14 +14,6 @@ use Modules\Core\CoreModule;
 class UserModule extends Module
 {
     /**
-     * @var \Modules\User\Models\Profile
-     */
-    public $profileModelClass = '\Modules\User\Models\Profile';
-    /**
-     * @var \Modules\User\Forms\ProfileForm
-     */
-    public $profileFormClass = '\Modules\User\Forms\ProfileForm';
-    /**
      * @var array
      */
     public $config = [];

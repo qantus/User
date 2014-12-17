@@ -51,6 +51,9 @@ abstract class UserBase extends Model
                 'null' => true,
                 'verboseName' => UserModule::t("Activation key"),
             ],
+            "profile_id" => [
+                'class' => IntField::className()
+            ],
             "is_active" => [
                 'class' => BooleanField::className(),
                 'verboseName' => UserModule::t("Is active"),

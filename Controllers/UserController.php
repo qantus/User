@@ -20,7 +20,7 @@ class UserController extends CoreController
         return ['index', 'view'];
     }
 
-    public function beforeAction($action)
+    public function beforeAction($owner, $action)
     {
         $user = Mindy::app()->getUser();
 
@@ -28,7 +28,7 @@ class UserController extends CoreController
             $this->r->redirect(Mindy::app()->getModule('user')->getLoginUrl());
         }
 
-        if ($this->getModule()->userList === false && !$user->is_superuser) {
+        if ($action->getId() == 'list' && $this->getModule()->userList === false && !$user->is_superuser) {
             $this->error(404);
         }
 

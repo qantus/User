@@ -28,7 +28,7 @@ class RecoverForm extends Form
     public function send()
     {
         $model = User::objects()->filter(
-            [strpos($this->username_or_email, "@") ? 'email' : 'username' => $this->username_or_email]
+            [strpos($this->username_or_email->getValue(), "@") ? 'email' : 'username' => $this->username_or_email->getValue()]
         )->get();
 
         if ($model && $model->objects()->changeActivationKey()) {

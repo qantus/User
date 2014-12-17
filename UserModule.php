@@ -45,6 +45,18 @@ class UserModule extends Module
      * @var bool
      */
     public $sendUserCreateRawMail = false;
+    /**
+     * @var bool
+     */
+    public $enableRecaptcha = false;
+    /**
+     * @var string
+     */
+    public $recaptchaPublicKey;
+    /**
+     * @var string
+     */
+    public $recaptchaSecretKey;
 
     public static function preConfigure()
     {

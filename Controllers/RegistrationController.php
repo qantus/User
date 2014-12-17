@@ -3,6 +3,7 @@
 namespace Modules\User\Controllers;
 
 use Modules\Core\Controllers\CoreController;
+use Modules\Hosting\Components\RestClient;
 use Modules\User\Forms\RegistrationForm;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
@@ -23,7 +24,7 @@ class RegistrationController extends CoreController
         $this->addBreadcrumb(UserModule::t("Registration"));
 
         $form = new RegistrationForm();
-        if($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
+        if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
             $this->r->redirect('user.registration_success');
         }
 
@@ -40,15 +41,15 @@ class RegistrationController extends CoreController
     public function actionActivate($key)
     {
         $model = User::objects()->filter(['activation_key' => $key])->get();
-        if($model === null) {
+        if ($model === null) {
             $this->error(404);
         }
 
-        if($model->is_active) {
+        if ($model->is_active) {
             $this->r->redirect('user.login');
         }
 
-        if($model->activation_key === $key) {
+        if ($model->activation_key === $key) {
             $model->is_active = true;
             $model->save(['is_active']);
 

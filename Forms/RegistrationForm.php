@@ -6,7 +6,9 @@ use Mindy\Base\Mindy;
 use Mindy\Form\Fields\CharField;
 use Mindy\Form\Fields\EmailField;
 use Mindy\Form\Fields\PasswordField;
+use Mindy\Form\Fields\RecaptchaField;
 use Mindy\Form\Form;
+use Mindy\Locale\Translate;
 use Mindy\Validation\MinLengthValidator;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
@@ -19,14 +21,32 @@ class RegistrationForm extends Form
 {
     public function getFields()
     {
-        return [
+        $fields = [
             'username' => [
                 'class' => CharField::className(),
-                'label' => UserModule::t('Username')
+                'label' => UserModule::t('Username'),
+                'required' => true,
+                'validators' => [
+                    function ($value) {
+                        if (User::objects()->filter(['username' => $value])->count() > 0) {
+                            return UserModule::t("Username must be a unique");
+                        }
+                        return true;
+                    }
+                ]
             ],
             'email' => [
                 'class' => EmailField::className(),
-                'label' => UserModule::t('Email')
+                'label' => UserModule::t('Email'),
+                'required' => true,
+                'validators' => [
+                    function ($value) {
+                        if (User::objects()->filter(['email' => $value])->count() > 0) {
+                            return UserModule::t("Email must be a unique");
+                        }
+                        return true;
+                    }
+                ]
             ],
             'password' => [
                 'class' => PasswordField::className(),
@@ -41,8 +61,25 @@ class RegistrationForm extends Form
                     new MinLengthValidator(6)
                 ],
                 'label' => UserModule::t('Password repeat')
-            ]
+            ],
         ];
+
+        $module = Mindy::app()->getModule('User');
+
+        if ($module->enableRecaptcha) {
+            if (empty($module->recaptchaPublicKey) && empty($module->recaptchaSecretKey)) {
+                Mindy::app()->logger->warning("publicKey and secretKey isn't set in UserModule");
+            } else {
+                $fields['captcha'] = [
+                    'class' => RecaptchaField::className(),
+                    'label' => Translate::getInstance()->t('validation', 'Captcha'),
+                    'publicKey' => $module->recaptchaPublicKey,
+                    'secretKey' => $module->recaptchaSecretKey
+                ];
+            }
+        }
+
+        return $fields;
     }
 
     public function cleanPassword_repeat($value)

@@ -22,8 +22,14 @@ class UserController extends CoreController
 
     public function beforeAction($action)
     {
-        if (Mindy::app()->user->isGuest) {
+        $user = Mindy::app()->getUser();
+
+        if ($user->isGuest) {
             $this->r->redirect(Mindy::app()->getModule('user')->getLoginUrl());
+        }
+
+        if ($this->getModule()->userList === false && !$user->is_superuser) {
+            $this->error(404);
         }
 
         return true;
@@ -46,8 +52,7 @@ class UserController extends CoreController
         $this->addBreadcrumb($model);
 
         echo $this->render('user/view.html', [
-            'model' => $model,
-            'profile' => $model->profile,
+            'model' => $model
         ]);
     }
 
@@ -76,7 +81,6 @@ class UserController extends CoreController
 
         echo $this->render('user/profile.html', [
             'model' => $model,
-            'profile' => $model->profile,
         ]);
     }
 

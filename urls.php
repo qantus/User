@@ -17,10 +17,6 @@ return [
         'name'     => 'profile',
         'callback' => '\Modules\User\Controllers\UserController:profile',
     ],
-    '/profile/edit' => [
-        'name'     => 'profile_update',
-        'callback' => '\Modules\User\Controllers\ProfileController:update',
-    ],
     '/password' => [
         'name'     => 'change_password',
         'callback' => '\Modules\User\Controllers\UserController:changepassword',

@@ -16,19 +16,21 @@ class PermissionForm extends ModelForm
     public function getFieldsets()
     {
         return [
-            UserModule::t('Main information') => ['code', 'name', 'bizrule'],
-            UserModule::t('Settings') => ['is_visible', 'is_locked', 'is_default', 'is_global', 'is_auto'],
+            UserModule::t('Main information') => [
+                'code', 'name', 'bizrule'
+            ],
+            UserModule::t('Settings') => [
+                'is_visible', 'is_locked', 'is_default', 'is_global', 'is_auto'
+            ],
         ];
     }
 
     public function getFields()
     {
         $model = $this->getInstance();
-
         $fields = parent::getFields();
 
         $user = Mindy::app()->user;
-
         if ($user) {
             if (!$user->is_superuser) {
                 unset($fields['is_global']);

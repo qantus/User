@@ -105,17 +105,14 @@ class UserModule extends Module
             'name' => $this->getName(),
             'items' => [
                 [
-                    'code' => 'UserAdmin',
                     'name' => self::t('Users'),
                     'adminClass' => 'UserAdmin',
                 ],
                 [
-                    'code' => 'GroupAdmin',
                     'name' => self::t('Groups'),
                     'adminClass' => 'GroupAdmin',
                 ],
                 [
-                    'code' => 'PermissionAdmin',
                     'name' => self::t('Permissions'),
                     'adminClass' => 'PermissionAdmin',
                 ]

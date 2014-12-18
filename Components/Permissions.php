@@ -150,7 +150,7 @@ class Permissions
         $groupPerms = GroupPermission::objects()->filter(['permission__code__isnull' => false])->all();
         foreach ($groupPerms as $perm) {
             $code = $perm->permission->code;
-            $this->_groupPerms[$code][] = $perm->user_group_id;
+            $this->_groupPerms[$code][] = $perm->group_id;
         }
     }
 
@@ -182,7 +182,7 @@ class Permissions
      */
     public function hasGroupPermission($code, $userId, $type = null)
     {
-        if (isset($this->_groupPerms[$code])) {
+        if (isset($this->_groupPerms[$code]) && !empty($this->_groupPerms[$code])) {
             $groups = $this->getUserGroups($userId);
             foreach ($groups as $id) {
                 if (in_array($id, $this->_groupPerms[$code])) {

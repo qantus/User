@@ -23,30 +23,23 @@ class PermissionForm extends ModelForm
 
     public function getFields()
     {
-        $model = $this->getModel();
-        $fields = $model->getFieldsInit();
+        $model = $this->getInstance();
 
-        $formFields = [];
-        foreach ($fields as $name => $field) {
-            $tmp = $field->getFormField($this);
-            if ($tmp) {
-                $formFields[$name] = $tmp;
-            }
-        }
+        $fields = parent::getFields();
 
         $user = Mindy::app()->user;
 
         if ($user) {
             if (!$user->is_superuser) {
-                unset($formFields['is_global']);
+                unset($fields['is_global']);
             }
 
-            if (!$user->is_superuser && $model->is_auto == 1) {
-                unset($formFields['is_locked']);
+            if (!$user->is_superuser && $model && $model->is_auto == 1) {
+                unset($fields['is_locked']);
             }
         }
 
-        return $formFields;
+        return $fields;
     }
 
     public function getModel()

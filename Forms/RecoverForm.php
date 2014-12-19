@@ -20,7 +20,7 @@ class RecoverForm extends Form
         return [
             'username_or_email' => [
                 'class' => CharField::className(),
-                'label' => UserModule::t('Username or email')
+                'label' => UserModule::t('Email')
             ]
         ];
     }

@@ -33,7 +33,7 @@ class RecoverForm extends Form
 
         if ($model && $model->objects()->changeActivationKey()) {
             $app = Mindy::app();
-            $recoverUrl = $app->urlManager->reverse('user.recover', [
+            $recoverUrl = $app->urlManager->reverse('user.recover_activate', [
                 'key' => $model->activation_key
             ]);
             return $app->mail->fromCode('user.recover', $model->email, [

@@ -28,20 +28,17 @@ class Permission extends Model
         return [
             "code" => [
                 'class' => CharField::className(),
-                'length' => 50,
                 'verboseName' => UserModule::t("Key"),
                 'unique' => true,
                 'helpText' => UserModule::t("Rule code for developers to use in source code")
             ],
             "name" => [
                 'class' => CharField::className(),
-                'length' => 200,
                 'verboseName' => UserModule::t("Name"),
                 'helpText' => UserModule::t("Rule name")
             ],
             "bizrule" => [
                 'class' => CharField::className(),
-                'length' => 255,
                 'null' => true,
                 'verboseName' => UserModule::t("Bussines rule"),
                 'helpText' => UserModule::t("More info in documentation")

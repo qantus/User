@@ -32,7 +32,7 @@ class PermissionControlFilter extends Filter
     {
         $user = Mindy::app()->getUser();
         $controller = $filterChain->controller;
-        $action = $filterChain->action->id;
+        $action = strtolower($filterChain->action->getId());
 
         // Проверка на разрешенные actions
         if ($this->isAllowedAction($action, $filterChain) === true) {

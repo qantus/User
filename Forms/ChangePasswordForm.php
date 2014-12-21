@@ -58,6 +58,6 @@ class ChangePasswordForm extends Form
 
     public function save()
     {
-        return $this->getModel()->objects()->setPassword($this->password_create->getValue());
+        return $this->getModel()->objects()->setPassword($this->password_create, 'mindy');
     }
 }

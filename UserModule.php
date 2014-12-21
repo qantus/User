@@ -39,7 +39,7 @@ class UserModule extends Module
     public $userList = true;
     /**
      * @var bool
-     */    
+     */
     public $sendUserCreateMail = true;
     /**
      * @var bool
@@ -71,16 +71,18 @@ class UserModule extends Module
 
         $signal = $app->signal;
         $signal->handler('\Modules\User\Models\UserBase', 'createUser', function ($user) use ($app) {
-            $app->mail->fromCode('user.registration', $user->email, [
-                'data' => $user,
-                'site' => $app->getModule('Sites')->getSite(),
-                'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user.registration_activation', [
+            if (!$user->is_active) {
+                $app->mail->fromCode('user.registration', $user->email, [
+                    'data' => $user,
+                    'site' => $app->getModule('Sites')->getSite(),
+                    'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user.registration_activation', [
                         'key' => $user->activation_key
                     ]))
-            ]);
+                ]);
+            }
         });
         $signal->handler('\Modules\User\Models\UserBase', 'createRawUser', function ($user, $password) {
-            if (!Console::isCli() && $user->email) {
+            if (!Console::isCli() && $user->email && !$user->is_active) {
                 Mindy::app()->mail->fromCode('user.create_raw_user', $user->email, [
                     'data' => $user,
                     'password' => $password

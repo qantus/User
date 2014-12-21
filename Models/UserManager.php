@@ -23,6 +23,11 @@ use Mindy\Orm\Manager;
  */
 class UserManager extends Manager
 {
+    /**
+     * @var string
+     */
+    public $defaultPasswordHasher = 'mindy';
+
     protected function getEventManager()
     {
         static $eventManager;
@@ -48,11 +53,7 @@ class UserManager extends Manager
     {
         /** @var \Modules\User\PasswordHasher\IPasswordHasher $hasher */
         $auth = Mindy::app()->auth;
-        if (isset($extra['hash_type'])) {
-            $hasher = $auth->getPasswordHasher($extra['hash_type']);
-        } else {
-            $hasher = $auth->getPasswordHasher('mindy');
-        }
+        $hasher = $auth->getPasswordHasher(isset($extra['hash_type']) ? $extra['hash_type'] : $this->defaultPasswordHasher);
 
         $model = $this->getModel();
         $model->setAttributes(array_merge([
@@ -101,12 +102,12 @@ class UserManager extends Manager
      * @return bool
      * @throws \Exception
      */
-    public function setPassword($password, $hasherType = 'mindy')
+    public function setPassword($password, $hasherType = null)
     {
         /** @var \Modules\User\PasswordHasher\IPasswordHasher $hasher */
         /** @var \Modules\User\Components\Auth $$auth */
         $auth = Mindy::app()->auth;
-        $hasher = $auth->getPasswordHasher($hasherType);
+        $hasher = $auth->getPasswordHasher($hasherType == null ? $this->defaultPasswordHasher : $hasherType);
 
         return $this->getModel()->setAttributes([
             'password' => $hasher->hashPassword($password)

@@ -4,7 +4,7 @@ namespace Modules\User\Commands;
 
 use Mindy\Console\ConsoleCommand;
 use Mindy\Helper\Console;
-use Mindy\Helper\Password;
+use Mindy\Validation\EmailValidator;
 use Modules\User\Models\User;
 
 /**
@@ -36,7 +36,7 @@ class UserCommand extends ConsoleCommand
         return $password;
     }
 
-    public function actionChangepassword($username)
+    public function actionChangepassword($username, $hashType = null)
     {
         $user = User::objects()->get(['username' => $username]);
         if ($user === null) {
@@ -44,28 +44,54 @@ class UserCommand extends ConsoleCommand
             exit(1);
         }
         $password = $this->getPassword();
-        $user->objects()->setPassword($password);
-        echo "Password updated\n";
-        exit(Password::verifyPassword($password, $user->password) ? 1 : 0);
+
+        if (empty($hashType)) {
+            $hashType = $user->hash_type;
+        } else if (!empty($hashType) && $user->hash_type != $hashType) {
+            $user->hash_type = $hashType;
+            $user->save(['hash_type']);
+        }
+        $updated = $user->objects()->setPassword($password, $hashType);
+        echo $updated ? "Password updated\n" : "Failed update password\n";
+        exit(0);
     }
 
-    public function actionCreatesuperuser($username = null, $email = null)
+    /**
+     * @param $username string
+     * @param $email string
+     * @param $hashType null|string
+     * @param $superuser bool
+     */
+    protected function createUser($username, $email, $hashType = null, $superuser)
     {
         if ($username === null) {
             $username = Console::prompt("Username:");
         }
 
-        // TODO check correct email
         if ($email === null) {
             $email = Console::prompt("Email:");
         }
 
-        $has = User::objects()->get(['username' => $username, 'email' => $email]);
+        $emailValidator = new EmailValidator(true);
+        if (!$emailValidator->validate($email)) {
+            echo "Incorrect email address\n";
+            exit(1);
+        }
+
+        $has = User::objects()->filter(['username' => $username])->orFilter(['email' => $email])->get();
 
         if ($has === null) {
             $password = $this->getPassword();
 
-            $model = User::objects()->createSuperUser($username, $password, $email);
+            if ($superuser) {
+                $model = User::objects()->createSuperUser($username, $password, $email, [
+                    'hash_type' => $hashType
+                ]);
+            } else {
+                $model = User::objects()->createUser($username, $password, $email, [
+                    'hash_type' => $hashType
+                ]);
+            }
 
             if (is_array($model)) {
                 echo implode("\n", $model);
@@ -78,5 +104,15 @@ class UserCommand extends ConsoleCommand
             echo "User already exists\n";
             exit(0);
         }
+    }
+
+    public function actionCreatesuperuser($username = null, $email = null, $hashType = null)
+    {
+        $this->createUser($username, $email, $hashType, true);
+    }
+
+    public function actionCreateUser($username = null, $email = null, $hashType = null)
+    {
+        $this->createUser($username, $email, $hashType, false);
     }
 }

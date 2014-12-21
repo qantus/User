@@ -13,7 +13,7 @@
 
 namespace Modules\User\PasswordHasher;
 
-use Mindy\Helper\Password;
+use Mindy\Base\Mindy;
 
 class BitrixPasswordHasher implements IPasswordHasher
 {
@@ -22,7 +22,7 @@ class BitrixPasswordHasher implements IPasswordHasher
      */
     public function generateSalt()
     {
-        return Password::generateSalt(8);
+        return Mindy::app()->getSecurityManager()->generateRandomString(8, true);
     }
 
     /**
@@ -43,8 +43,7 @@ class BitrixPasswordHasher implements IPasswordHasher
     public function verifyPassword($password, $hash)
     {
         $salt = substr($hash, 0, 8);
-        $hash = substr($hash, 8);
-        return $salt . $hash == $salt . md5($salt . $password);
+        return $hash == $salt . md5($salt . $password);
     }
 }
  

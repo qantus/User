@@ -307,6 +307,10 @@ class Auth
         return $this->_model;
     }
 
+    /**
+     * @param $name
+     * @throws Exception
+     */
     public function getPasswordHasher($name)
     {
         if (isset($this->passwordHashers[$name])) {

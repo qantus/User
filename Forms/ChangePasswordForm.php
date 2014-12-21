@@ -14,13 +14,22 @@ use Modules\User\UserModule;
  */
 class ChangePasswordForm extends Form
 {
+    /**
+     * @var \Modules\User\Models\User
+     */
     private $_model;
 
+    /**
+     * @param \Modules\User\Models\User
+     */
     public function setModel(User $model)
     {
         $this->_model = $model;
     }
 
+    /**
+     * @return \Modules\User\Models\User
+     */
     public function getModel()
     {
         return $this->_model;
@@ -48,16 +57,16 @@ class ChangePasswordForm extends Form
 
     public function cleanPassword_repeat($value)
     {
-        if ($this->password_create->getValue() === $value) {
-            return $value;
-        } else {
+        if ($this->password_create->getValue() !== $value) {
             $this->addError('password_repeat', 'Incorrect password repeat');
+            return null;
         }
-        return null;
+        return $value;
     }
 
     public function save()
     {
-        return $this->getModel()->objects()->setPassword($this->password_create, $this->getModel()->hash_type);
+        $model = $this->getModel();
+        return $model->objects()->setPassword($this->password_create, $model->hash_type);
     }
 }

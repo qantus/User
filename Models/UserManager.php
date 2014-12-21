@@ -99,12 +99,14 @@ class UserManager extends Manager
     /**
      * @param $password
      * @return bool
+     * @throws \Exception
      */
-    public function setPassword($password, $hasherType = null)
+    public function setPassword($password, $hasherType = 'mindy')
     {
         /** @var \Modules\User\PasswordHasher\IPasswordHasher $hasher */
+        /** @var \Modules\User\Components\Auth $$auth */
         $auth = Mindy::app()->auth;
-        $hasher = $auth->getPasswordHasher($hasherType !== null ? $hasherType : 'mindy');
+        $hasher = $auth->getPasswordHasher($hasherType);
 
         return $this->getModel()->setAttributes([
             'password' => $hasher->hashPassword($password)

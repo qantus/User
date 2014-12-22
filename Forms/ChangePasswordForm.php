@@ -67,6 +67,6 @@ class ChangePasswordForm extends Form
     public function save()
     {
         $model = $this->getModel();
-        return $model->objects()->setPassword($this->password_create, $model->hash_type);
+        return $model->objects()->setPassword($this->password_create->getValue(), $model->hash_type->getValue());
     }
 }

@@ -23,9 +23,9 @@ class LoginForm extends Form
         return [
             'username' => [
                 'class' => CharField::className(),
-                'label' => UserModule::t('Username'),
+                'label' => UserModule::t('Email or username'),
                 'html' => [
-                    'placeholder' => UserModule::t('Username')
+                    'placeholder' => UserModule::t('Email or username')
                 ],
             ],
             'password' => [

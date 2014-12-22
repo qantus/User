@@ -115,4 +115,5 @@ return array(
     'Update user: {name}' => 'Редактирование пользователя: {name}',
     'Email must be a unique' => 'Электронный адрес уже используется на сайте',
     'Username must be a unique' => 'Имя пользователя уже используется на сайте',
+    'Email or username' => 'Электронная почта или имя пользователя'
 );

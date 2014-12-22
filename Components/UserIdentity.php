@@ -8,6 +8,7 @@ use Mindy\Orm\Model;
 use Modules\User\Models\User;
 
 /**
+ * @DEPRECATED
  * Class UserIdentity
  * @package Modules\User
  */

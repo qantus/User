@@ -22,6 +22,11 @@ class UserAdmin extends ModelAdmin
      */
     public $updateTemplate = 'admin/user/update.html';
 
+    public function getSearchFields()
+    {
+        return ['username', 'email'];
+    }
+
     public function getColumns()
     {
         return [

@@ -58,6 +58,12 @@ class UserModule extends Module
      */
     public $recaptchaSecretKey;
 
+    /**
+     * @var bool
+     */
+    public $destroySessionAfterLogout = true;
+
+
     public static function preConfigure()
     {
         $app = Mindy::app();

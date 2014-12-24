@@ -52,11 +52,11 @@ class AuthController extends CoreController
     public function actionLogout()
     {
         $auth = Mindy::app()->auth;
-        if($auth->isGuest) {
+        if ($auth->isGuest) {
             $this->r->redirect(Mindy::app()->homeUrl);
         }
 
-        $auth->logout();
+        $auth->logout($this->getModule()->destroySessionAfterLogout);
         $this->r->redirect('user.login');
     }
 }

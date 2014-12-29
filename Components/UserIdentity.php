@@ -56,9 +56,15 @@ class UserIdentity extends BaseUserIdentity
     public function authenticate()
     {
         $auth = Mindy::app()->auth;
-        $model = User::objects()->filter(
-            [strpos($this->username, "@") ? 'email' : 'username' => $this->username]
-        )->get();
+        if (strpos($this->username, "@")) {
+            $model = User::objects()->filter(
+                ['email' => strtolower($this->username)]
+            )->get();
+        } else {
+            $model = User::objects()->filter(
+                ['username' => $this->username]
+            )->get();
+        }
 
         if ($model === null) {
             if (strpos($this->username, "@")) {

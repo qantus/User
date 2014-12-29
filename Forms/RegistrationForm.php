@@ -94,7 +94,7 @@ class RegistrationForm extends Form
 
     public function cleanEmail($value)
     {
-        if (User::objects()->filter(['email' => $value])->count() > 0) {
+        if (User::objects()->filter(['email' => strtolower($value)])->count() > 0) {
             $this->addError('email', UserModule::t('This email address is already in use on the site'));
         }
         return $value;

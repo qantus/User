@@ -43,11 +43,11 @@ class UserController extends CoreController
         }
 
         if ($model->username == Mindy::app()->user->username) {
-            $this->r->redirect('user.profile');
+            $this->r->redirect('user:profile');
         }
 
         if ($this->getModule()->userList) {
-            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user:list'));
         }
         $this->addBreadcrumb($model);
 
@@ -59,7 +59,7 @@ class UserController extends CoreController
     public function actionIndex()
     {
         if ($this->getModule()->userList) {
-            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user:list'));
         }
 
         $qs = User::objects()->active();
@@ -75,7 +75,7 @@ class UserController extends CoreController
         $model = Mindy::app()->user;
 
         if ($this->getModule()->userList) {
-            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user:list'));
         }
         $this->addBreadcrumb($model);
 
@@ -89,7 +89,7 @@ class UserController extends CoreController
         $model = Mindy::app()->user;
 
         if ($this->getModule()->userList) {
-            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user.list'));
+            $this->addBreadcrumb(UserModule::t("Users"), Mindy::app()->urlManager->reverse('user:list'));
         }
         $this->addBreadcrumb($model, $model->getAbsoluteUrl());
         $this->addBreadcrumb(UserModule::t("Change password"));
@@ -100,7 +100,7 @@ class UserController extends CoreController
 
         if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
             $this->r->flash->success(UserModule::t('Password changed'));
-            $this->r->redirect('user.login');
+            $this->r->redirect('user:login');
         }
 
         echo $this->render('user/change_password.html', [

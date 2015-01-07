@@ -22,7 +22,7 @@ class AuthController extends CoreController
     {
         $app = Mindy::app();
         if (!$app->user->isGuest) {
-            $this->r->redirect('user.profile');
+            $this->r->redirect('user:profile');
         }
 
         $this->addBreadcrumb(UserModule::t("Login"));
@@ -37,7 +37,7 @@ class AuthController extends CoreController
                     'title' => UserModule::t('You have successfully logged in to the site')
                 ]);
             } else {
-                $this->r->redirect('user.profile');
+                $this->r->redirect('user:profile');
             }
         }
 
@@ -57,6 +57,6 @@ class AuthController extends CoreController
         }
 
         $auth->logout($this->getModule()->destroySessionAfterLogout);
-        $this->r->redirect('user.login');
+        $this->r->redirect('user:login');
     }
 }

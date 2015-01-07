@@ -28,7 +28,7 @@ class UserModule extends Module
     /**
      * @var string
      */
-    public $loginUrl = 'user.login';
+    public $loginUrl = 'user:login';
     /**
      * @var int 3600 * 24 * $days
      */

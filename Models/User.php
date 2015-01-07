@@ -25,6 +25,6 @@ class User extends UserBase
 
     public function getAbsoluteUrl()
     {
-        return $this->reverse('user.view', ['username' => $this->username]);
+        return $this->reverse('user:view', ['username' => $this->username]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Modules\User\Forms;
 
+use Mindy\Base\Mindy;
 use Mindy\Form\Fields\PasswordField;
 use Mindy\Form\Form;
 use Mindy\Validation\MinLengthValidator;
@@ -18,6 +19,18 @@ class ChangePasswordForm extends Form
      * @var \Modules\User\Models\User
      */
     private $_model;
+
+    public function getFieldsets()
+    {
+        return [
+            UserModule::t('Please enter current password') => [
+                'password_current'
+            ],
+            UserModule::t('New password') => [
+                'password_create', 'password_repeat'
+            ]
+        ];
+    }
 
     /**
      * @param \Modules\User\Models\User
@@ -38,6 +51,10 @@ class ChangePasswordForm extends Form
     public function getFields()
     {
         return [
+            'password_current' => [
+                'class' => PasswordField::className(),
+                'label' => UserModule::t('Current password')
+            ],
             'password_create' => [
                 'class' => PasswordField::className(),
                 'validators' => [
@@ -50,9 +67,22 @@ class ChangePasswordForm extends Form
                 'validators' => [
                     new MinLengthValidator(6)
                 ],
-                'label' => UserModule::t('Password repeat')
+                'label' => UserModule::t('Password repeat'),
+                'hint' => UserModule::t('Please repeat your password')
             ]
         ];
+    }
+
+    public function cleanPassword_current($value)
+    {
+        $model = $this->getModel();
+        $auth = Mindy::app()->auth;
+        $hasher = $auth->getPasswordHasher($model->hash_type);
+        if ($hasher->verifyPassword($this->password_current->getValue(), $model->password) === false) {
+            $this->addError('password_current', 'Incorrect password');
+            return null;
+        }
+        return $value;
     }
 
     public function cleanPassword_repeat($value)

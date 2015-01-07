@@ -19,7 +19,7 @@
     </table>
 
     <p>
-        <a class="button" href="{% url 'user.change_password' %}">{{ t('Change password', 'user') }}</a>
-        <a class="button" href="{% url 'user.logout' %}">{{ t('Logout', 'user') }}</a>
+        <a class="button" href="{% url 'user:change_password' %}">{{ t('Change password', 'user') }}</a>
+        <a class="button" href="{% url 'user:logout' %}">{{ t('Logout', 'user') }}</a>
     </p>
 {% endblock %}

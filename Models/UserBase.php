@@ -94,6 +94,11 @@ abstract class UserBase extends Model
         ];
     }
 
+    public function getIp()
+    {
+        return Mindy::app()->request->http->getUserHostAddress();
+    }
+
     public function __toString()
     {
         return (string)$this->username;

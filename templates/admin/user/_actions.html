@@ -1,10 +1,10 @@
 {% if 'update' in admin.actionsList %}
-    <a href="{% url 'admin.update' moduleName adminClass model.pk %}">
+    <a href="{% url 'admin:update' moduleName adminClass model.pk %}">
         <i class="icon-edit"></i>
     </a>
 {% endif %}
 
-<a href="{% url 'admin.changepassword' model.pk %}">
+<a href="{% url 'admin:changepassword' model.pk %}">
     <i class="icon-key"></i>
 </a>
 
@@ -15,13 +15,13 @@
 {% endif %}
 
 {% if 'info' in admin.actionsList %}
-    <a href="{% url 'admin.info' moduleName adminClass model.pk %}">
+    <a href="{% url 'admin:info' moduleName adminClass model.pk %}">
         <i class="icon-info"></i>
     </a>
 {% endif %}
 
 {% if 'delete' in admin.actionsList %}
-    <a class="action-delete" data-confirm="Вы действительно хотите удалить?" href="{% url 'admin.delete' moduleName adminClass model.pk %}">
+    <a class="action-delete" data-confirm="Вы действительно хотите удалить?" href="{% url 'admin:delete' moduleName adminClass model.pk %}">
         <i class="icon-x"></i>
     </a>
 {% endif %}

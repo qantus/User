@@ -14,7 +14,8 @@
 
 namespace Modules\User\Components;
 
-use Modules\Core\Components\UserLog;
+use Mindy\Base\Mindy;
+use Modules\Core\Models\UserLog;
 
 /**
  * Class UserActionsTrait
@@ -22,10 +23,16 @@ use Modules\Core\Components\UserLog;
  */
 trait UserActionsTrait
 {
-    public static function recordAction($message, $moduleName)
+    public static function recordAction($message, $module)
     {
-        if (YII_TEST === false) {
-            return UserLog::log($message, $moduleName);
+        if (MINDY_TEST === false) {
+            $app = Mindy::app();
+            UserLog::objects()->create([
+                'message' => $message,
+                'module' => $module,
+                'ip' => $app->getUser()->getIp(),
+                'user' => $app->getUser()->getIsGuest() ? null : $app->getUser(),
+            ]);
         }
     }
 }

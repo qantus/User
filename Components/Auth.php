@@ -233,7 +233,7 @@ class Auth
         $model->setIsGuest(false);
         $this->setModel($model);
 
-        $this->recordAction(UserModule::t('User [[{url}|{name}]] logged in', [
+        $this->recordAction(UserModule::t('User <a href="{url}">{name}</a> logged in', [
             '{url}' => $model->getAbsoluteUrl(),
             '{name}' => (string)$model
         ]), $model->getModuleName());

@@ -102,7 +102,7 @@ class Permissions
     /**
      * @bool Отображение ошибок выполнения bizRule
      */
-    public $showErrors = YII_DEBUG;
+    public $showErrors = MINDY_DEBUG;
     /**
      * @var bool Auto fetch data from database
      */

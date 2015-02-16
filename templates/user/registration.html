@@ -3,7 +3,7 @@
 {% block content %}
     <h1>{{ t('Registration', 'user') }}</h1>
 
-    <form action="{% url 'user.registration' %}" method="post">
+    <form action="{% url 'user:registration' %}" method="post">
         {% csrf_token %}
         {{ form|safe }}
         <br/>

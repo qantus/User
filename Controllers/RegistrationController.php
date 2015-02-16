@@ -25,7 +25,7 @@ class RegistrationController extends CoreController
 
         $form = new RegistrationForm();
         if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
-            $this->r->redirect('user.registration_success');
+            $this->r->redirect('user:registration_success');
         }
 
         echo $this->render('user/registration.html', [

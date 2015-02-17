@@ -81,7 +81,7 @@ class UserModule extends Module
                 $app->mail->fromCode('user.registration', $user->email, [
                     'data' => $user,
                     'site' => $app->getModule('Sites')->getSite(),
-                    'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user.registration_activation', [
+                    'activation_link' => $app->request->http->absoluteUrl($app->urlManager->reverse('user:registration_activation', [
                         'key' => $user->activation_key
                     ]))
                 ]);

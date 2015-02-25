@@ -6,6 +6,7 @@ use Mindy\Base\Mindy;
 use Mindy\Helper\Params;
 use Mindy\Orm\Fields\BooleanField;
 use Mindy\Orm\Fields\CharField;
+use Mindy\Orm\Fields\DateTimeField;
 use Mindy\Orm\Fields\EmailField;
 use Mindy\Orm\Fields\ForeignField;
 use Mindy\Orm\Fields\IntField;
@@ -91,6 +92,11 @@ abstract class UserBase extends Model
                 'null' => true,
                 'verboseName' => UserModule::t("User profile"),
             ],
+            'created_at' => [
+                'class' => DateTimeField::className(),
+                'autoNowAdd' => true,
+                'verboseName' => UserModule::t('Created at')
+            ]
         ];
     }
 

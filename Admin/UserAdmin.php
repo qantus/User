@@ -4,6 +4,7 @@ namespace Modules\User\Admin;
 
 use Mindy\Orm\Model;
 use Modules\Admin\Components\ModelAdmin;
+use Modules\Admin\Tables\AdminDateTimeColumn;
 use Modules\User\Forms\UserForm;
 use Modules\User\Models\User;
 
@@ -30,11 +31,12 @@ class UserAdmin extends ModelAdmin
     public function getColumns()
     {
         return [
-            'id',
             'username',
             'email',
             'is_staff',
             'is_superuser',
+            'last_login' => AdminDateTimeColumn::className(),
+            'created_at'
         ];
     }
 

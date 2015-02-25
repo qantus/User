@@ -39,6 +39,14 @@ class DatabaseSessionHandler extends SessionHandler
     }
 
     /**
+     * @return bool|void
+     */
+    public function close()
+    {
+        return true;
+    }
+
+    /**
      * Session open handler.
      * Do not call this method directly.
      * @param string $save_path session save path
@@ -64,8 +72,7 @@ class DatabaseSessionHandler extends SessionHandler
         ])->get();
 
         $data = $session === null ? '' : $session->data;
-
-        if($this->encrypt) {
+        if ($this->encrypt) {
             $data = mcrypt_decrypt(MCRYPT_3DES, $this->key, $data, MCRYPT_MODE_ECB);
         }
         return $data;
@@ -85,19 +92,18 @@ class DatabaseSessionHandler extends SessionHandler
         // http://us.php.net/manual/en/function.session-set-save-handler.php
         $expire = time() + (int)ini_get('session.gc_maxlifetime');
 
-        if($this->encrypt) {
+        if ($this->encrypt) {
             $session_data = mcrypt_encrypt(MCRYPT_3DES, $this->key, $session_data, MCRYPT_MODE_ECB);
         }
 
-        $session = Session::objects()->filter(['id' => $session_id])->get();
+        $session = Session::objects()->get(['id' => $session_id]);
         if ($session === null) {
             $session = new Session([
                 'id' => $session_id,
                 'data' => $session_data,
                 'expire' => $expire,
             ]);
-            $saved = $session->save();
-            if ($saved === false) {
+            if ($session->save() === false) {
                 throw new Exception("Can't create session");
             }
         } else {

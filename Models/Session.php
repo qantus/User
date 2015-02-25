@@ -10,7 +10,7 @@ use Modules\User\UserModule;
 
 /**
  * All rights reserved.
- * 
+ *
  * @author Falaleev Maxim
  * @email max@studio107.ru
  * @version 1.0
@@ -31,11 +31,12 @@ class Session extends Model
             'id' => [
                 'class' => CharField::className(),
                 'length' => 32,
-                'primary' => true
+                'primary' => true,
+                'null' => false,
             ],
             'expire' => [
                 'class' => IntField::className(),
-                'null' => true,
+                'null' => false,
                 'verboseName' => UserModule::t("Expire time"),
             ],
             'data' => [
@@ -44,5 +45,10 @@ class Session extends Model
                 'verboseName' => UserModule::t("Session data"),
             ]
         ];
+    }
+
+    public function __toString()
+    {
+        return (string)$this->id;
     }
 }

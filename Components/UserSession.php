@@ -16,7 +16,7 @@ class UserSession extends HttpSession
      * This method overrides the parent implementation and always returns true.
      * @return boolean whether to use custom storage.
      */
-    public function getUseCustomStorage()
+    public function getCustomHandler()
     {
         return new DatabaseSessionHandler();
     }

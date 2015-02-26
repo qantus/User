@@ -80,6 +80,9 @@ class Auth
      */
     public function init()
     {
+        $signal = $this->getEventManager();
+        $signal->handler($this, 'onAuth', [$this, 'onAuth']);
+
         if ($this->getIsGuest() && $this->allowAutoLogin) {
             $this->restoreFromCookie();
         } elseif ($this->autoRenewCookie && $this->allowAutoLogin) {
@@ -98,6 +101,16 @@ class Auth
         }
 
         $this->updateAuthStatus();
+    }
+
+    public function onAuth($user)
+    {
+
+    }
+
+    public function getEventManager()
+    {
+        return Mindy::app()->signal;
     }
 
     public function getIsSuperUser()
@@ -232,6 +245,7 @@ class Auth
 
         $model->setIsGuest(false);
         $this->setModel($model);
+        $this->getEventManager()->send($this, 'onAuth', $model);
 
         $this->recordAction(UserModule::t('User <a href="{url}">{name}</a> logged in', [
             '{url}' => $model->getAbsoluteUrl(),

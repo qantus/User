@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>{{ t('Recover password', 'user') }}</h1>
-    <form action="{% url 'user.recover' %}" method="post">
+    <form action="{% url 'user:recover' %}" method="post">
         {% csrf_token %}
         {{ form|safe }}
         <br/>
